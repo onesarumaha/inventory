@@ -13,7 +13,7 @@ class AddRoleColumnToUsersTable extends Migration
                 'type' => 'VARCHAR',
                 'constraint' => 20,
                 'null' => false,
-                'default' => 'user',
+                'default' => 'petugas',
                 'after' => 'active', 
             ],
         ]);
