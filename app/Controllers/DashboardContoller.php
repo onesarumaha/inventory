@@ -12,11 +12,7 @@ class DashboardContoller extends BaseController
         $data = [
             'title' => 'Dashboard',
         ];
-        return view('layout/header', $data)
-        . view('layout/sidebar')
-        . view('layout/topbar')
-        . view('dashboard/index')
-        . view('layout/footer');    
+        return view('dashboard/index', $data);    
     }
     
 }
