@@ -19,4 +19,14 @@ class Users extends BaseController
         ];
         return view('users/index', $data);    
     }
+
+    public function delete($id)
+    {
+        $usersModel = new ModelsUsers();
+        if ($usersModel->delete($id)) {
+            return redirect()->to('/users')->with('success', 'users deleted successfully.');
+        } else {
+            return redirect()->to('/users')->with('error', 'Failed to delete users.');
+        }
+    }
 }

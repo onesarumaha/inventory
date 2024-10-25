@@ -93,6 +93,10 @@ class AuthController extends Controller
             return redirect()->to(route_to('reset-password') . '?token=' . $this->auth->user()->reset_hash)->withCookies();
         }
 
+        $user = $this->auth->user();
+        $session = session();
+        $session->set('username', $user->username); 
+
         // $redirectURL = session('redirect_url') ?? site_url('/dashboard');
         $redirectURL = session('dashboard') ?? site_url('/dashboard');
         unset($_SESSION['redirect_url']);
