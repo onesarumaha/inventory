@@ -30,7 +30,7 @@
           </div>
         </div>
       </li>
-      <li class="nav-item">
+      <!-- <li class="nav-item">
         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseForm" aria-expanded="true"
           aria-controls="collapseForm">
           <i class="fab fa-fw fa-wpforms"></i>
@@ -42,12 +42,19 @@
             <a class="collapse-item" href="form_basics.html">Penjualan</a>
           </div>
         </div>
+      </li> -->
+
+      <li class="nav-item">
+        <a class="nav-link" href="charts.html">
+          <i class="fas fa-fw fa-chart-area"></i>
+          <span>Pengeluaran</span>
+        </a>
       </li>
  
       <li class="nav-item">
         <a class="nav-link" href="charts.html">
           <i class="fas fa-fw fa-chart-area"></i>
-          <span>Pengadaan Barang</span>
+          <span>Pemasukan</span>
         </a>
       </li>
     </ul>
