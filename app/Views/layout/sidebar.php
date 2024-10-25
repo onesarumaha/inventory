@@ -7,7 +7,7 @@
       </a>
       <hr class="sidebar-divider my-0">
       <li class="nav-item active">
-        <a class="nav-link" href="index.html">
+        <a class="nav-link" href="<?= base_url('/dashboard') ?>">
           <i class="fas fa-fw fa-tachometer-alt"></i>
           <span>Dashboard</span></a>
       </li>
@@ -24,9 +24,9 @@
         <div id="collapseBootstrap" class="collapse" aria-labelledby="headingBootstrap" data-parent="#accordionSidebar">
           <div class="bg-white py-2 collapse-inner rounded">
             <h6 class="collapse-header">Master</h6>
-            <a class="collapse-item" href="alerts.html">User</a>
-            <a class="collapse-item" href="buttons.html">Product</a>
-            <a class="collapse-item" href="dropdowns.html">Supplier</a>
+            <a class="collapse-item" href="<?= base_url('/users') ?>">User</a>
+            <a class="collapse-item" href="<?= base_url('/product') ?>">Product</a>
+            <a class="collapse-item" href="<?= base_url('/supplier') ?>">Supplier</a>
           </div>
         </div>
       </li>

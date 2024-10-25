@@ -12,9 +12,24 @@
   <link href="<?= base_url('frontend/assets/') ?>vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
   <link href="<?= base_url('frontend/assets/') ?>vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css">
   <link href="<?= base_url('frontend/assets/') ?>css/ruang-admin.min.css" rel="stylesheet">
+  <link href="<?= base_url('frontend/assets/') ?>vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
+
   <script src="https://cdn.jsdelivr.net/npm/sweetalert@2/dist/sweetalert.min.js"></script>
 
 </head>
+
+
+<?php if (session()->getFlashdata('message')): ?>
+<script>
+    Swal.fire({
+        title: 'Success!',
+        text: '<?= session()->getFlashdata('message') ?>',
+        icon: 'success',
+        confirmButtonText: 'OK'
+    });
+</script>
+<?php endif; ?>
+
 
 <body id="page-top">
   <div id="wrapper">
@@ -32,10 +47,10 @@
         <!-- Container Fluid-->
         <div class="container-fluid" id="container-wrapper">
           <div class="d-sm-flex align-items-center justify-content-between mb-4">
-            <h1 class="h3 mb-0 text-gray-800">Dashboard</h1>
+            <h1 class="h3 mb-0 text-gray-800"><?= $title ?></h1>
             <ol class="breadcrumb">
-              <li class="breadcrumb-item"><a href="./">Home</a></li>
-              <li class="breadcrumb-item active" aria-current="page">Dashboard</li>
+              <li class="breadcrumb-item"><a href="<?= base_url('/dashboard') ?>">Home</a></li>
+              <li class="breadcrumb-item active" aria-current="page"><?= $title ?></li>
             </ol>
           </div>
 
@@ -92,6 +107,18 @@
   <script src="<?= base_url('frontend/assets/') ?>js/ruang-admin.min.js"></script>
   <script src="<?= base_url('frontend/assets/') ?>vendor/chart.js/Chart.min.js"></script>
   <script src="<?= base_url('frontend/assets/') ?>js/demo/chart-area-demo.js"></script>  
+
+   <!-- Page level plugins -->
+   <script src="<?= base_url('frontend/assets/') ?>vendor/datatables/jquery.dataTables.min.js"></script>
+  <script src="<?= base_url('frontend/assets/') ?>vendor/datatables/dataTables.bootstrap4.min.js"></script>
+
+  <!-- Page level custom scripts -->
+  <script>
+    $(document).ready(function () {
+      $('#dataTable').DataTable(); // ID From dataTable 
+      $('#dataTableHover').DataTable(); // ID From dataTable with Hover
+    });
+  </script>
 </body>
 
 </html>
