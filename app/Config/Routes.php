@@ -16,7 +16,10 @@ $routes->get('/dashboard', [DashboardContoller::class, 'index']);
 
 // route users
 $routes->get('/users', [Users::class, 'index']);
-$routes->delete('/users/(:num)', [Product::class, 'delete/$1']);
+$routes->delete('/users/(:num)', [Users::class, 'delete/$1']);
+$routes->get('/users/edit/(:segment)', [Users::class, 'edit/$1']);
+$routes->post('/users/update/(:segment)', [Users::class, 'update/$1']);
+
 
 // route supplier
 $routes->get('/supplier', [Supplier::class, 'index']);
