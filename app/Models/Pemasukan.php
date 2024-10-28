@@ -4,15 +4,15 @@ namespace App\Models;
 
 use CodeIgniter\Model;
 
-class Customer extends Model
+class Pemasukan extends Model
 {
-    protected $table            = 'customer';
+    protected $table            = 'pengadaan_barang';
     protected $primaryKey       = 'id';
     protected $useAutoIncrement = true;
     protected $returnType       = 'array';
     protected $useSoftDeletes   = false;
     protected $protectFields    = true;
-    protected $allowedFields    = ['name', 'email', 'address'];
+    protected $allowedFields    = ['product_id', 'quantity', 'price', 'supplier_id', 'user_id', 'date'];
 
     protected bool $allowEmptyInserts = false;
     protected bool $updateOnlyChanged = true;

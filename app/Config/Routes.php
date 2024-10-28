@@ -1,9 +1,12 @@
 <?php
 
 use App\Controllers\AuthController;
+use App\Controllers\Customer;
 use App\Controllers\DashboardContoller;
+use App\Controllers\Pemasukan;
 use App\Controllers\Product;
 use App\Controllers\Supplier;
+use App\Controllers\Transaksi;
 use App\Controllers\Users;
 use CodeIgniter\Router\RouteCollection;
 
@@ -29,6 +32,14 @@ $routes->get('/supplier/edit/(:segment)', [Supplier::class, 'edit/$1']);
 $routes->post('/supplier/update/(:segment)', [Supplier::class, 'update/$1']);
 $routes->delete('/supplier/(:num)', [Supplier::class, 'delete/$1']);
 
+// route customer
+$routes->get('/customer', [Customer::class, 'index']);
+$routes->get('/customer/create', [Customer::class, 'create']);
+$routes->post('/customer/store', [Customer::class, 'store']);
+$routes->get('/customer/edit/(:segment)', [Customer::class, 'edit/$1']);
+$routes->post('/customer/update/(:segment)', [Customer::class, 'update/$1']);
+$routes->delete('/customer/(:num)', [Customer::class, 'delete/$1']);
+
 // route product
 $routes->get('/product', [Product::class, 'index']);
 $routes->get('/product/create', [Product::class, 'create']);
@@ -36,3 +47,11 @@ $routes->post('/product/store', [Product::class, 'store']);
 $routes->get('/product/edit/(:segment)', [Product::class, 'edit/$1']);
 $routes->post('/product/update/(:segment)', [Product::class, 'update/$1']);
 $routes->delete('/product/(:num)', [Product::class, 'delete/$1']);
+
+// route pengeluaran
+$routes->get('/pengeluaran', [Transaksi::class, 'index']);
+$routes->get('/pengeluaran/create', [Transaksi::class, 'create']);
+
+// route pemasukan
+$routes->get('/pemasukan', [Pemasukan::class, 'index']);
+$routes->get('/pemasukan/create', [Pemasukan::class, 'create']);

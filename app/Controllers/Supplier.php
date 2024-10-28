@@ -50,7 +50,7 @@ class Supplier extends BaseController
             'address' => $this->request->getPost('address'),
         ]);
 
-        return redirect()->to('/supplier')->with('message', 'User successfully created.');
+        return redirect()->to('/supplier')->with('message', 'Supplier successfully created.');
     
     }
 

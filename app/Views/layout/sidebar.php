@@ -26,6 +26,7 @@
             <h6 class="collapse-header">Master</h6>
             <a class="collapse-item <?= is_active('/users') ?>" href="<?= base_url('/users') ?>">User</a>
             <a class="collapse-item <?= is_active('/product') ?>" href="<?= base_url('/product') ?>">Product</a>
+            <a class="collapse-item <?= is_active('/customer') ?>" href="<?= base_url('/customer') ?>">Customer</a>
             <a class="collapse-item <?= is_active('/supplier') ?>" href="<?= base_url('/supplier') ?>">Supplier</a>
           </div>
         </div>

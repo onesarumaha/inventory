@@ -13,7 +13,8 @@
   <link href="<?= base_url('frontend/assets/') ?>vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css">
   <link href="<?= base_url('frontend/assets/') ?>css/ruang-admin.min.css" rel="stylesheet">
   <link href="<?= base_url('frontend/assets/') ?>vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
-
+  <link href="<?= base_url('frontend/assets/') ?>vendor/select2/dist/css/select2.min.css" rel="stylesheet" type="text/css">
+  <link href="<?= base_url('frontend/assets/') ?>vendor/bootstrap-datepicker/css/bootstrap-datepicker.min.css" rel="stylesheet" >
 </head>
 <body id="page-top">
   <div id="wrapper">
@@ -95,12 +96,28 @@
    <!-- Page level plugins -->
    <script src="<?= base_url('frontend/assets/') ?>vendor/datatables/jquery.dataTables.min.js"></script>
   <script src="<?= base_url('frontend/assets/') ?>vendor/datatables/dataTables.bootstrap4.min.js"></script>
-
+  <script src="<?= base_url('frontend/assets/') ?>vendor/select2/dist/js/select2.min.js"></script>
   <!-- Page level custom scripts -->
+  <script src="<?= base_url('frontend/assets/') ?>vendor/bootstrap-datepicker/js/bootstrap-datepicker.min.js"></script>
+  
+
   <script>
     $(document).ready(function () {
       $('#dataTable').DataTable(); 
       $('#dataTableHover').DataTable(); 
+
+      $('.select2-single').select2();
+
+
+        // Bootstrap Date Picker
+      $('#simple-date1 .input-group.date').datepicker({
+        format: 'dd/mm/yyyy',
+        todayBtn: 'linked',
+        todayHighlight: true,
+        autoclose: true,        
+      }).datepicker('setDate', new Date());;
+
+
     });
   </script>
 </body>
@@ -110,7 +127,7 @@
     <?php if (session()->getFlashdata('message')): ?>
         Swal.fire({
             icon: 'success',
-            title: 'Success!',
+            title: 'Success !',
             text: '<?= session()->getFlashdata('message'); ?>',
             showConfirmButton: false,
             timer: 2000
@@ -137,7 +154,7 @@
     <?php if (session()->getFlashdata('message')): ?>
         Swal.fire({
             icon: 'success',
-            title: 'Deleted!',
+            title: 'Deleted !',
             text: '<?= session()->getFlashdata('message'); ?>',
             showConfirmButton: false,
             timer: 2000
