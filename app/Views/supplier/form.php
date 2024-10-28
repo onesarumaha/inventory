@@ -44,7 +44,11 @@
                 <div class="form-group">
                     <label for="exampleFormControlTextarea1">Alamat</label>
                     <textarea class="form-control" name="address" id="exampleFormControlTextarea1" rows="3"><?= old('address', isset($supplier) ? $supplier['address'] : ''); ?></textarea>
-
+                    <?php if (session()->getFlashdata('errors')['address'] ?? null): ?>
+                        <div style="color: red;">
+                            <?= session()->getFlashdata('errors')['address']; ?>
+                        </div>
+                    <?php endif; ?>
                 </div>
                 <button type="submit" class="btn btn-primary"><?= isset($supplier) ? 'Update' : 'Create'; ?></button>
                 </form>

@@ -45,13 +45,15 @@
                         <a href="<?= base_url('/supplier/edit') ?>/<?= $supplier['id'] ?>" class="btn btn-warning" style="margin-right: 5px;">
                             <i class="fas fa-pen"></i>
                         </a>
-                        <form action="<?= base_url('/supplier') ?>/<?= $supplier['id'] ?>" method="post" onsubmit="return confirm('Are you sure you want to delete this supplier?');" style="margin: 0;">
+
+                        <form id="delete-form" action="<?= base_url('/supplier') ?>/<?= $supplier['id'] ?>" method="post" style="margin: 0;">
                             <input type="hidden" name="_method" value="DELETE">
                             <?= csrf_field(); ?>
-                            <button class="btn btn-danger">
+                            <button type="button" class="btn btn-danger" onclick="confirmDelete()">
                                 <i class="fas fa-trash"></i>
                             </button>
                         </form>
+
                     </td>
 
                 </tr>

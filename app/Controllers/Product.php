@@ -113,7 +113,7 @@ class Product extends BaseController
     {
         $productModel = new ModelsProduct();
         if ($productModel->delete($id)) {
-            return redirect()->to('/product')->with('success', 'Product deleted successfully.');
+            return redirect()->to('/product')->with('message', 'Product deleted successfully.');
         } else {
             return redirect()->to('/product')->with('error', 'Failed to delete product.');
         }

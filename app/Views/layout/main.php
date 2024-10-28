@@ -14,23 +14,7 @@
   <link href="<?= base_url('frontend/assets/') ?>css/ruang-admin.min.css" rel="stylesheet">
   <link href="<?= base_url('frontend/assets/') ?>vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
 
-  <script src="https://cdn.jsdelivr.net/npm/sweetalert@2/dist/sweetalert.min.js"></script>
-
 </head>
-
-
-<?php if (session()->getFlashdata('message')): ?>
-<script>
-    Swal.fire({
-        title: 'Success!',
-        text: '<?= session()->getFlashdata('message') ?>',
-        icon: 'success',
-        confirmButtonText: 'OK'
-    });
-</script>
-<?php endif; ?>
-
-
 <body id="page-top">
   <div id="wrapper">
     <!-- Sidebar -->
@@ -115,10 +99,59 @@
   <!-- Page level custom scripts -->
   <script>
     $(document).ready(function () {
-      $('#dataTable').DataTable(); // ID From dataTable 
-      $('#dataTableHover').DataTable(); // ID From dataTable with Hover
+      $('#dataTable').DataTable(); 
+      $('#dataTableHover').DataTable(); 
     });
   </script>
 </body>
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+    <?php if (session()->getFlashdata('message')): ?>
+        Swal.fire({
+            icon: 'success',
+            title: 'Success!',
+            text: '<?= session()->getFlashdata('message'); ?>',
+            showConfirmButton: false,
+            timer: 2000
+        });
+    <?php endif; ?>
+    
+    function confirmDelete() {
+        Swal.fire({
+            title: 'Yakin hapus data ?',
+            text: "Aapakah yakin ingin menghapus data ini?",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#d33',
+            cancelButtonColor: '#3085d6',
+            confirmButtonText: 'Iya',
+            cancelButtonText: 'Tidak'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                document.getElementById('delete-form').submit();
+            }
+        });
+    }
+
+    <?php if (session()->getFlashdata('message')): ?>
+        Swal.fire({
+            icon: 'success',
+            title: 'Deleted!',
+            text: '<?= session()->getFlashdata('message'); ?>',
+            showConfirmButton: false,
+            timer: 2000
+        });
+    <?php elseif (session()->getFlashdata('error')): ?>
+        Swal.fire({
+            icon: 'error',
+            title: 'Error!',
+            text: '<?= session()->getFlashdata('error'); ?>',
+            showConfirmButton: false,
+            timer: 2000
+        });
+    <?php endif; ?>
+</script>
+</script>
 
 </html>

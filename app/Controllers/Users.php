@@ -85,7 +85,7 @@ class Users extends BaseController
     {
         $usersModel = new ModelsUsers();
         if ($usersModel->delete($id)) {
-            return redirect()->to('/users')->with('success', 'users deleted successfully.');
+            return redirect()->to('/users')->with('message', 'users deleted successfully.');
         } else {
             return redirect()->to('/users')->with('error', 'Failed to delete users.');
         }

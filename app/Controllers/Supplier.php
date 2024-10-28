@@ -107,7 +107,7 @@ class Supplier extends BaseController
     {
         $supplierModel = new ModelsSupplier();
         if ($supplierModel->delete($id)) {
-            return redirect()->to('/supplier')->with('success', 'Supplier deleted successfully.');
+            return redirect()->to('/supplier')->with('message', 'Supplier deleted successfully.');
         } else {
             return redirect()->to('/supplier')->with('error', 'Failed to delete supplier.');
         }
