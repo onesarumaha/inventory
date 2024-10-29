@@ -91,7 +91,7 @@
   <script src="<?= base_url('frontend/assets/') ?>vendor/jquery-easing/jquery.easing.min.js"></script>
   <script src="<?= base_url('frontend/assets/') ?>js/ruang-admin.min.js"></script>
   <script src="<?= base_url('frontend/assets/') ?>vendor/chart.js/Chart.min.js"></script>
-  <script src="<?= base_url('frontend/assets/') ?>js/demo/chart-area-demo.js"></script>  
+  <script src="<?= base_url('frontend/assets/') ?>js/demo/chart-bar-demo.js"></script>
 
    <!-- Page level plugins -->
    <script src="<?= base_url('frontend/assets/') ?>vendor/datatables/jquery.dataTables.min.js"></script>

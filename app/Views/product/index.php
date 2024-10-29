@@ -39,7 +39,7 @@
                     <td><?= $no++; ?></td>
                     <td><?= $product['name'] ?></td>
                     <td><?= $product['sku'] ?></td>
-                    <td><?= $product['price'] ?></td>
+                    <td>Rp. <?= number_format($product['price'] ) ?></td>
                     <td><?= $product['stock'] ?></td>
                     <td style="display: flex; align-items: center;">
                         <a href="<?= base_url('/product/edit') ?>/<?= $product['id'] ?>" class="btn btn-warning" style="margin-right: 5px;">

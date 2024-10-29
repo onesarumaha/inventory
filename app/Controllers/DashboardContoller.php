@@ -14,7 +14,7 @@ class DashboardContoller extends BaseController
         $products = $product->findAll();
 
         $minStock = array_filter($products, function ($product) {
-            return $product['stock'] <= 15;
+            return $product['stock'] <= 10;
         });
 
         $data = [
