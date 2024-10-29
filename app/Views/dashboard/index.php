@@ -184,6 +184,9 @@
                 </div>
               </div>
             </div>
+
+                    
+
             <!-- Invoice Example -->
             <div class="col-xl-8 col-lg-7 mb-4">
               <div class="card">
@@ -289,5 +292,56 @@
               </div>
             </div>
           </div>
+
+          <!-- Modal min stock -->
+         <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="exampleModalLabel">Stock Barang Hampir Habis</h5>
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+                <div class="modal-body">
+                    <div class="table-responsive">
+                        <table class="table align-items-center table-flush">
+                            <thead class="thead-light">
+                                <tr>
+                                    <th>Nama Product</th>
+                                    <th>Stock</th>
+                                </tr>
+                            </thead>
+                        <tbody>
+                          <?php 
+                          $no = 1;
+                          foreach($minStock as $product ) : ?>
+                          <tr>
+                              <td><?= $product['name'] ?></td>
+                              <td><?= $product['stock'] ?></td>
+                          </tr>
+                          <?php endforeach; ?>
+                          
+                          </tbody>
+                      </table>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-outline-primary" data-dismiss="modal">Oke</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+         <script>
+          <?php if (!empty($minStock)): ?>
+              $(document).ready(function () {
+                  $('#exampleModal').modal('show');
+              });
+          <?php endif; ?>
+      </script>
+
 
 <?= $this->endSection() ?>
