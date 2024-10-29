@@ -106,7 +106,7 @@ class Customer extends BaseController
     {
         $customerModel = new ModelsCustomer();
         if ($customerModel->delete($id)) {
-            return redirect()->to('/customer')->with('message', 'customer deleted successfully.');
+            return redirect()->to('/customer')->with('messageDelete', 'customer deleted successfully.');
         } else {
             return redirect()->to('/customer')->with('error', 'Failed to delete customer.');
         }

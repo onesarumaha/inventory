@@ -48,13 +48,13 @@
             <div class="modal-dialog" role="document">
               <div class="modal-content">
                 <div class="modal-header">
-                  <h5 class="modal-title" id="exampleModalLabelLogout">Ohh No!</h5>
+                  <h5 class="modal-title" id="exampleModalLabelLogout">Logout !</h5>
                   <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                   </button>
                 </div>
                 <div class="modal-body">
-                  <p>Are you sure you want to logout?</p>
+                  <p>Yakin ingin keluar dari sistem ?</p>
                 </div>
                 <div class="modal-footer">
                   <button type="button" class="btn btn-outline-primary" data-dismiss="modal">Cancel</button>
@@ -71,8 +71,8 @@
       <footer class="sticky-footer bg-white">
         <div class="container my-auto py-2">
           <div class="copyright text-center my-auto">
-            <span>copyright &copy; <script> document.write(new Date().getFullYear()); </script> - distributed by
-              <b><a href="https://themewagon.com/" target="_blank">themewagon</a></b>
+            <span>copyright &copy; <script> document.write(new Date().getFullYear()); </script> - Inventory |
+              <b><a href="https://themewagon.com/" target="_blank">PT. ALPHA KUMALA WARDHANA JAKARTA</a></b>
             </span>
           </div>
         </div>
@@ -124,6 +124,24 @@
 
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
+    <?php if (session()->getFlashdata('messages')): ?>
+       const Toast = Swal.mixin({
+           toast: true,
+           position: "top-end",
+           showConfirmButton: false,
+           timer: 3000,
+           timerProgressBar: true,
+           didOpen: (toast) => {
+               toast.onmouseenter = Swal.stopTimer;
+               toast.onmouseleave = Swal.resumeTimer;
+           }
+       });
+
+       Toast.fire({
+           icon: "success",
+           title: "Login berhasil"
+       });
+   <?php endif; ?>
     <?php if (session()->getFlashdata('message')): ?>
         Swal.fire({
             icon: 'success',
@@ -151,11 +169,11 @@
         });
     }
 
-    <?php if (session()->getFlashdata('message')): ?>
+    <?php if (session()->getFlashdata('messageDelete')): ?>
         Swal.fire({
             icon: 'success',
             title: 'Deleted !',
-            text: '<?= session()->getFlashdata('message'); ?>',
+            text: '<?= session()->getFlashdata('messageDelete'); ?>',
             showConfirmButton: false,
             timer: 2000
         });

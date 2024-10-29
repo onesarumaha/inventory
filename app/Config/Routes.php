@@ -3,8 +3,10 @@
 use App\Controllers\AuthController;
 use App\Controllers\Customer;
 use App\Controllers\DashboardContoller;
+use App\Controllers\Omset;
 use App\Controllers\Pemasukan;
 use App\Controllers\Product;
+use App\Controllers\Stock;
 use App\Controllers\Supplier;
 use App\Controllers\Transaksi;
 use App\Controllers\Users;
@@ -55,3 +57,7 @@ $routes->get('/pengeluaran/create', [Transaksi::class, 'create']);
 // route pemasukan
 $routes->get('/pemasukan', [Pemasukan::class, 'index']);
 $routes->get('/pemasukan/create', [Pemasukan::class, 'create']);
+
+// route stok product
+$routes->get('/stock', [Stock::class, 'index']);
+$routes->get('/omset', [Omset::class, 'index']);
