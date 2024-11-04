@@ -96,6 +96,7 @@ class AuthController extends Controller
         $user = $this->auth->user();
         $session = session();
         $session->set('username', $user->username); 
+        $session->set('id', $user->id); 
 
         // $redirectURL = session('redirect_url') ?? site_url('/dashboard');
         $redirectURL = session('dashboard') ?? site_url('/dashboard');

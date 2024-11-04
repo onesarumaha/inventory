@@ -35,7 +35,7 @@ class Product extends BaseController
     {
         $rules = [
             'name' => 'required|min_length[3]|max_length[50]',
-            'sku' => 'required',
+            'volume' => 'required',
             'price' => 'required|numeric',
             'stock' => 'required|numeric',
             'description' => 'required|min_length[5]|max_length[255]',
@@ -48,7 +48,7 @@ class Product extends BaseController
         $productModel = new ModelsProduct();
         $productModel->save([
             'name' => $this->request->getPost('name'),
-            'sku' => $this->request->getPost('sku'),
+            'volume' => $this->request->getPost('volume'),
             'price' => $this->request->getPost('price'),
             'stock' => $this->request->getPost('stock'),
             'description' => $this->request->getPost('description'),
@@ -86,7 +86,7 @@ class Product extends BaseController
     
         $rules = [
             'name' => 'required|min_length[3]|max_length[50]',
-            'sku' => 'required',
+            'volume' => 'required',
             'price' => 'required|numeric',
             'stock' => 'required|numeric',
             'description' => 'required|min_length[5]|max_length[255]',
@@ -98,7 +98,7 @@ class Product extends BaseController
     
         $data = [
             'name' => $this->request->getPost('name'),
-            'sku' => $this->request->getPost('sku'),
+            'volume' => $this->request->getPost('volume'),
             'price' => $this->request->getPost('price'),
             'stock' => $this->request->getPost('stock'),
             'description' => $this->request->getPost('description'),

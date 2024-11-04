@@ -45,8 +45,25 @@
                     <td><?= $pemasukan['price'] ?></td>
                     <td><?= $pemasukan['quantity'] ?></td>
                     <td><?= $pemasukan['supplier_id'] ?></td>
-                    <td><?= $pemasukan['status'] ?></td>
-                    <td><?= $pemasukan['upload'] ?></td>
+                    <td>
+                    <?php 
+                        if ($pemasukan['status'] == 0) {
+                            echo '<span class="badge bg-warning text-light">Menunggu di approve admin</span>';
+                        } elseif ($pemasukan['status'] == 1) {
+                            echo '<span class="badge bg-primary text-light">Menunggu di approve owner</span>';
+                        } elseif ($pemasukan['status'] == 2) {
+                            echo '<span class="badge bg-success text-light">Selesai</span>';
+                        } else {
+                            echo 'Status tidak diketahui';
+                        }
+                        ?>
+                    </td>
+                    <td>
+                        <a href="<?= site_url('pemasukan/download/' . $pemasukan['upload']) ?>">
+                            Download
+                        </a>
+                    </td>
+
                     <td style="display: flex; align-items: center;">
                         <a href="<?= base_url('/pemasukan/edit') ?>/<?= $pemasukan['id'] ?>" class="btn btn-warning" style="margin-right: 5px;">
                             <i class="fas fa-pen"></i>

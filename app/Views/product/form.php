@@ -22,12 +22,12 @@
                     <?php endif; ?>
                 </div>
                 <div class="form-group">
-                    <label for="exampleInputEmail1">SKU</label>
-                    <input type="text" class="form-control" name="sku" id="exampleInputEmail1" aria-describedby="emailHelp"
-                    placeholder="SKU" value="<?= old('sku', isset($product) ? $product['sku'] : ''); ?>">
-                    <?php if (session()->getFlashdata('errors')['sku'] ?? null): ?>
+                    <label for="exampleInputEmail1">Volume</label>
+                    <input type="text" class="form-control" name="volume" id="exampleInputEmail1" aria-describedby="emailHelp"
+                    placeholder="Volume" value="<?= old('volume', isset($product) ? $product['volume'] : ''); ?>">
+                    <?php if (session()->getFlashdata('errors')['volume'] ?? null): ?>
                         <div style="color: red;">
-                            <?= session()->getFlashdata('errors')['sku']; ?>
+                            <?= session()->getFlashdata('errors')['volume']; ?>
                         </div>
                     <?php endif; ?>
                 </div>

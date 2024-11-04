@@ -9,27 +9,32 @@
                 <h6 class="m-0 font-weight-bold text-primary"><?= $title ?></h6>
             </div>
             <div class="card-body">
-            <form action="<?= isset($pengeluaran) ? base_url('/pengeluaran/update/'.$pengeluaran['id']) : base_url('/pengeluaran/store'); ?>" method="POST">
+            <form action="<?= isset($pemasukan) ? base_url('/pemasukan/update/'.$pemasukan['id']) : base_url('/pemasukan/store'); ?>" method="POST" enctype="multipart/form-data">
             <?= csrf_field(); ?>
                  <div class="row">
                     <div class="form-group col-md-6">
                         <div class="form-group">
                             <label for="select2SingleProduct">Nama Product</label>
-                                <select class="select2-single form-control" name="product_id" id="select2SingleProduct">
-                                <option value="">Pilih product</option>
-                                <option value="Aceh">Aceh</option>
-                                </select>
-                                <?php if (session()->getFlashdata('errors')['product_id'] ?? null): ?>
-                                    <div style="color: red;">
-                                        <?= session()->getFlashdata('errors')['product_id']; ?>
-                                    </div>
+                            <select class="select2-single form-control" name="product_id" id="select2SingleProduct">
+                                <option value="">Pilih Product</option>
+                                <?php foreach ($product as $pro): ?>
+                                    <option value="<?= $pro['id']; ?>" 
+                                        <?= ($pro['id'] == $pemasukan['product_id']) ? 'selected' : ''; ?>>
+                                        <?= $pro['name']; ?> | <?= $pro['volume']; ?>
+                                    </option>
+                                <?php endforeach; ?>
+                            </select>
+
+                            <?php if (session()->getFlashdata('errors')['product_id'] ?? null): ?>
+                                <div style="color: red;">
+                                    <?= session()->getFlashdata('errors')['product_id']; ?>
+                                </div>
                             <?php endif; ?>
                         </div>
-
                         <div class="form-group">
                             <label for="exampleInputName1">Harga</label>
                             <input type="text" class="form-control" name="price" id="exampleInputName1" aria-describedby="emailHelp"
-                            placeholder="Harga" value="<?= old('price', isset($pengeluaran) ? $pengeluaran['price'] : ''); ?>">
+                            placeholder="Harga" value="<?= old('price', isset($pemasukan) ? $pemasukan['price'] : ''); ?>">
                             <?php if (session()->getFlashdata('errors')['price'] ?? null): ?>
                                 <div style="color: red;">
                                     <?= session()->getFlashdata('errors')['price']; ?>
@@ -39,17 +44,14 @@
 
                         <div class="form-group">
                             <label for="exampleInputName1">Quantity</label>
-                            <input type="text" class="form-control" name="price" id="exampleInputName1" aria-describedby="emailHelp"
-                            placeholder="Nama customer" value="<?= old('price', isset($pengeluaran) ? $pengeluaran['price'] : ''); ?>">
-                            <?php if (session()->getFlashdata('errors')['price'] ?? null): ?>
+                            <input type="text" class="form-control" name="quantity" id="exampleInputName1" aria-describedby="emailHelp"
+                            placeholder="Quantity" value="<?= old('quantity', isset($pemasukan) ? $pemasukan['quantity'] : ''); ?>">
+                            <?php if (session()->getFlashdata('errors')['quantity'] ?? null): ?>
                                 <div style="color: red;">
-                                    <?= session()->getFlashdata('errors')['price']; ?>
+                                    <?= session()->getFlashdata('errors')['quantity']; ?>
                                 </div>
                             <?php endif; ?>
                         </div>
-
-                        
-
                     </div>
 
                     <div class="form-group col-md-6">
@@ -65,27 +67,37 @@
 
                         <div class="form-group">
                             <label for="select2Single">Nama Supplier</label>
-                            <select class="select2-single form-control" name="customer_id" id="select2Single">
-                            <option value="">Pilih Supplier</option>
-                                <?php foreach($customer as $cus ): ?>
-                                    <option value="<?= $cus['id']; ?>"><?= $cus['name']; ?></option>
-                                <?php endforeach ?>
+                            <select class="select2-single form-control" name="supplier_id" id="select2Single">
+                                <option value="">Pilih Supplier</option>
+                                <?php foreach ($supplier as $supp): ?>
+                                    <option value="<?= $supp['id']; ?>" 
+                                        <?= ($supp['id'] == $pemasukan['supplier_id']) ? 'selected' : ''; ?>>
+                                        <?= $supp['name']; ?>
+                                    </option>
+                                <?php endforeach; ?>
                             </select>
-                            <?php if (session()->getFlashdata('errors')['customer_id'] ?? null): ?>
+
+                            <?php if (session()->getFlashdata('errors')['supplier_id'] ?? null): ?>
                                 <div style="color: red;">
-                                    <?= session()->getFlashdata('errors')['customer_id']; ?>
+                                    <?= session()->getFlashdata('errors')['supplier_id']; ?>
                                 </div>
                             <?php endif; ?>
                         </div>
 
-                      
+                        <div class="form-group">
+                            <label for="select2Single">Lampiran</label>
+                            <div class="custom-file mt-3">
+                                <input type="file" name="upload" class="custom-file-input" id="customFile">
+                                <label class="custom-file-label" for="customFile">Choose file</label>
+                            </div>
+                        </div>
 
                     </div>
                  </div>
-
+                 <input type="hidden" name="user_id" value="<?= session()->get('id') ?>">
             
               
-                <button type="submit" class="btn btn-primary"><?= isset($product) ? 'Update' : 'Create'; ?></button>
+                <button type="submit" class="btn btn-primary"><?= isset($pemasukan) ? 'Update' : 'Create'; ?></button>
                 </form>
             </div>
         </div>

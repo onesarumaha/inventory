@@ -6,6 +6,7 @@ use App\Controllers\DashboardContoller;
 use App\Controllers\Omset;
 use App\Controllers\Pemasukan;
 use App\Controllers\Product;
+use App\Controllers\Profile;
 use App\Controllers\Stock;
 use App\Controllers\Supplier;
 use App\Controllers\Transaksi;
@@ -57,7 +58,16 @@ $routes->get('/pengeluaran/create', [Transaksi::class, 'create']);
 // route pemasukan
 $routes->get('/pemasukan', [Pemasukan::class, 'index']);
 $routes->get('/pemasukan/create', [Pemasukan::class, 'create']);
+$routes->post('/pemasukan/store', [Pemasukan::class, 'store']);
+$routes->get('/pemasukan/edit/(:any)', [Pemasukan::class, 'edit/$1']);
+$routes->get('/pemasukan/download/(:any)', [Pemasukan::class, 'download/$1']);
+
 
 // route stok product
 $routes->get('/stock', [Stock::class, 'index']);
 $routes->get('/omset', [Omset::class, 'index']);
+
+// route profile
+$routes->get('/profile', [Profile::class, 'index']);
+$routes->get('/profile/ganti-password', [Profile::class, 'gantiPassword']);
+$routes->post('/profile/update-password', [Profile::class, 'updatePassword']);

@@ -62,7 +62,7 @@
 
 
                         <div class="form-group col-md-2">
-                        <label for="exampleInputHP1">Price</label>
+                        <label for="exampleInputHP1">Harga</label>
                             <input type="number" class="form-control form-control-sm" id="exampleInputHP1" aria-describedby="emailHelp" placeholder="Price" readonly>
                         </div>
                    

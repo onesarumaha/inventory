@@ -12,7 +12,7 @@ class Pemasukan extends Model
     protected $returnType       = 'array';
     protected $useSoftDeletes   = false;
     protected $protectFields    = true;
-    protected $allowedFields    = ['product_id', 'quantity', 'price', 'supplier_id', 'user_id', 'date'];
+    protected $allowedFields    = ['product_id', 'quantity', 'upload', 'price', 'supplier_id', 'user_id', 'date'];
 
     protected bool $allowEmptyInserts = false;
     protected bool $updateOnlyChanged = true;
