@@ -12,7 +12,7 @@ class Pemasukan extends Model
     protected $returnType       = 'array';
     protected $useSoftDeletes   = false;
     protected $protectFields    = true;
-    protected $allowedFields    = ['product_id', 'quantity', 'upload', 'price', 'supplier_id', 'user_id', 'date'];
+    protected $allowedFields    = ['product_id', 'quantity', 'upload', 'price', 'supplier_id', 'user_id', 'date', 'status'];
 
     protected bool $allowEmptyInserts = false;
     protected bool $updateOnlyChanged = true;
@@ -43,4 +43,9 @@ class Pemasukan extends Model
     protected $afterFind      = [];
     protected $beforeDelete   = [];
     protected $afterDelete    = [];
+
+    public function product()
+    {
+        return $this->belongsTo(Product::class, 'product_id', 'id');
+    }
 }

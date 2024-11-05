@@ -155,7 +155,7 @@
     function confirmDelete() {
         Swal.fire({
             title: 'Yakin hapus data ?',
-            text: "Aapakah yakin ingin menghapus data ini?",
+            text: "Apakah yakin ingin menghapus data ini?",
             icon: 'warning',
             showCancelButton: true,
             confirmButtonColor: '#d33',
@@ -186,6 +186,54 @@
             timer: 2000
         });
     <?php endif; ?>
+
+    function confirmAdmin() {
+        Swal.fire({
+            title: 'Approve data ?',
+            text: "Apakah yakin ingin approve data ini?",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#d33',
+            cancelButtonColor: '#3085d6',
+            confirmButtonText: 'Iya',
+            cancelButtonText: 'Tidak'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                document.getElementById('approve-admin').submit();
+            }
+        });
+    }
+
+    function confirmOwner() {
+        Swal.fire({
+            title: 'Approve data ?',
+            text: "Apakah yakin ingin approve data ini?",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#d33',
+            cancelButtonColor: '#3085d6',
+            confirmButtonText: 'Iya',
+            cancelButtonText: 'Tidak'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                document.getElementById('approve-owner').submit();
+            }
+        });
+    }
+
+    <?php if (session()->getFlashdata('messageApprove')): ?>
+        Swal.fire({
+            icon: 'success',
+            title: 'Approve !',
+            text: '<?= session()->getFlashdata('messageApprove'); ?>',
+            showConfirmButton: false,
+            timer: 2000
+        });
+    <?php endif; ?>
+
+  
+
+
 </script>
 </script>
 

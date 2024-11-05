@@ -41,10 +41,10 @@
                 foreach($pemasukans as $pemasukan ) : ?>
                 <tr>
                     <td><?= $no++; ?></td>
-                    <td><?= $pemasukan['product_id'] ?></td>
-                    <td><?= $pemasukan['price'] ?></td>
+                    <td><?= $pemasukan['nama_product'] ?? '-'; ?></td> 
+                    <td>Rp. <?= number_format( $pemasukan['price'] ) ?></td>
                     <td><?= $pemasukan['quantity'] ?></td>
-                    <td><?= $pemasukan['supplier_id'] ?></td>
+                    <td><?= $pemasukan['nama_supplier'] ?></td>
                     <td>
                     <?php 
                         if ($pemasukan['status'] == 0) {
@@ -65,7 +65,9 @@
                     </td>
 
                     <td style="display: flex; align-items: center;">
-                        <a href="<?= base_url('/pemasukan/edit') ?>/<?= $pemasukan['id'] ?>" class="btn btn-warning" style="margin-right: 5px;">
+                    <?php if (session()->get('role') === 'petugas'): ?>
+   
+                    <a href="<?= base_url('/pemasukan/edit') ?>/<?= $pemasukan['id'] ?>" class="btn btn-warning" style="margin-right: 5px;">
                             <i class="fas fa-pen"></i>
                         </a>
                         <form id="delete-form" action="<?= base_url('/pemasukan') ?>/<?= $pemasukan['id'] ?>" method="post" style="margin: 0;">
@@ -75,6 +77,27 @@
                                 <i class="fas fa-trash"></i>
                             </button>
                         </form>
+                        <?php endif; ?>
+
+
+                        <?php if (session()->get('role') === 'admin'): ?>
+                            <form id="approve-admin" action="<?= base_url('/pemasukan/approve-admin') ?>/<?= $pemasukan['id'] ?>" method="post" style="margin: 0;">
+                                <input type="hidden" name="_method" value="POST">
+                                <?= csrf_field(); ?>
+                                <button type="button" class="btn btn-warning" onclick="confirmAdmin()">
+                                    <i class="fas fa-check"></i>
+
+                                </button>
+                            </form>
+                        <?php elseif (session()->get('role') === 'owner'): ?>
+                            <form id="approve-owner" action="<?= base_url('/pemasukan/approve-owner') ?>/<?= $pemasukan['id'] ?>" method="post" style="margin: 0;">
+                                <input type="hidden" name="_method" value="POST">
+                                <?= csrf_field(); ?>
+                                <button type="button" class="btn btn-success" onclick="confirmOwner()">
+                                    <i class="fas fa-solid fa-thumbs-up"></i>
+                                 </button>
+                            </form>
+                        <?php endif; ?>
 
                     </td>
 

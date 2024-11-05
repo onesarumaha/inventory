@@ -97,6 +97,7 @@ class AuthController extends Controller
         $session = session();
         $session->set('username', $user->username); 
         $session->set('id', $user->id); 
+        $session->set('role', $user->role); 
 
         // $redirectURL = session('redirect_url') ?? site_url('/dashboard');
         $redirectURL = session('dashboard') ?? site_url('/dashboard');

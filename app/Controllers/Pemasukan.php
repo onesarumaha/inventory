@@ -17,17 +17,36 @@ class Pemasukan extends BaseController
         $this->session = \Config\Services::session();
     }
 
+
     public function index()
     {
-        $query = new ModelsPemasukan();
-        $pemasukan = $query->orderBy('id', 'DESC')->findAll();
+        $db = \Config\Database::connect();
+        $builder = $db->table('pengadaan_barang')
+                      ->select('pengadaan_barang.*, product.name as nama_product, supplier.name as nama_supplier')
+                      ->join('product', 'pengadaan_barang.product_id = product.id', 'left')
+                      ->join('supplier', 'pengadaan_barang.supplier_id = supplier.id', 'left');
+        
+        $userRole = session()->get('role'); 
+        $userId = session()->get('id'); 
 
+        if ($userRole === 'owner') {
+            $builder->where('pengadaan_barang.status', 2);
+        } elseif ($userRole === 'petugas') {
+            $builder->where('pengadaan_barang.user_id', $userId); 
+        }
+        $builder->orderBy('pengadaan_barang.id', 'DESC');
+        
+        $pemasukan = $builder->get()->getResultArray();
         $data = [
-            'title' => 'Data pemasukan',
+            'title' => 'Data Pemasukan',
             'pemasukans' => $pemasukan,
         ];
-        return view('pemasukan/index', $data);    
+        
+        return view('pemasukan/index', $data);
     }
+    
+    
+
 
     public function create()
     {
@@ -66,7 +85,9 @@ class Pemasukan extends BaseController
         $fileName = null; 
         $file = $this->request->getFile('upload');
         if ($file && $file->isValid() && !$file->hasMoved()) {
-            $filePath = WRITEPATH . 'uploads';
+            // $filePath = WRITEPATH . 'uploads';
+            $filePath = FCPATH . 'uploads'; 
+
             $fileName = $file->getRandomName();
             if (!$file->move($filePath, $fileName)) {
                 log_message('error', 'Failed to move uploaded file: ' . $file->getErrorString());
@@ -121,10 +142,70 @@ class Pemasukan extends BaseController
         return view('pemasukan/form', $data); 
     }
 
+    public function update($id)
+    {
+        $validation = \Config\Services::validation();
+        
+        $validation->setRules([
+            'product_id' => 'required',
+            'price' => 'required|numeric',
+            'quantity' => 'required|numeric',
+            'upload' => 'uploaded[upload]|max_size[upload,2048]|ext_in[upload,pdf,doc,docx,jpg,jpeg,png]'
+        ]);
+        
+        // if (!$validation->withRequest($this->request)->run()) {
+        //     return redirect()->back()->withInput()->with('errors', $validation->getErrors());
+        // }
+    
+        $pemasukanModel = new ModelsPemasukan();
+        $existingData = $pemasukanModel->find($id);
+    
+        if (!$existingData) {
+            return redirect()->back()->with('errors', ['error' => 'Data not found.']);
+        }
+    
+        $fileName = $existingData['upload']; 
+        $file = $this->request->getFile('upload');
+    
+        // Handle file upload
+        if ($file && $file->isValid() && !$file->hasMoved()) {
+            $filePath = FCPATH . 'uploads'; 
+    
+            $fileName = $file->getRandomName();
+            if (!$file->move($filePath, $fileName)) {
+                log_message('error', 'Failed to move uploaded file: ' . $file->getErrorString());
+            }
+        } elseif (!$file) {
+            $fileName = $existingData['upload'];
+        } else {
+            log_message('error', 'Invalid file upload: ' . $file->getErrorString());
+        }
+    
+        $data = [
+            'product_id' => $this->request->getPost('product_id'),
+            'price' => $this->request->getPost('price'),
+            'quantity' => $this->request->getPost('quantity'),
+            'date' => $this->request->getPost('date'),
+            'supplier_id' => $this->request->getPost('supplier_id'),
+            'customer_id' => $this->request->getPost('customer_id'),
+            'user_id' => $this->request->getPost('user_id'),
+            'upload' => $fileName,  
+        ];
+    
+        log_message('debug', 'Data to update: ' . json_encode($data));
+        
+        if ($pemasukanModel->update($id, $data)) {
+            return redirect()->to('/pemasukan')->with('message', 'Data berhasil diupdate.');
+        } else {
+            return redirect()->back()->withInput()->with('errors', ['error' => 'Failed to update data.']);
+        }
+    }
+    
+
 
     public function download($filename)
     {
-        $filePath = WRITEPATH . 'uploads/' . $filename;
+        $filePath = FCPATH . 'uploads/' . $filename;
 
         if (file_exists($filePath)) {
             return $this->response->download($filePath, null)->setFileName($filename);
@@ -132,6 +213,68 @@ class Pemasukan extends BaseController
             return redirect()->back()->with('error', 'File tidak ditemukan.');
         }
     }
+
+    public function delete($id)
+    {
+        $pemasukanModel = new ModelsPemasukan();
+        $existingData = $pemasukanModel->find($id);
+    
+        if (!$existingData) {
+            return redirect()->to('/pemasukan')->with('error', 'Pemasukan not found.');
+        }
+        $filePath = FCPATH . 'uploads/' . $existingData['upload'];
+    
+        if ($pemasukanModel->delete($id)) {
+            if (file_exists($filePath)) {
+                unlink($filePath);
+            }
+    
+            return redirect()->to('/pemasukan')->with('messageDelete', 'Berhasil hapus data pemasukan.');
+        } else {
+            return redirect()->to('/pemasukan')->with('error', 'Failed to delete pemasukan.');
+        }
+    }
+
+    public function approveAdmin($id)
+    {
+        $pemasukanModel = new ModelsPemasukan();
+        $existingData = $pemasukanModel->find($id);
+    
+        if ($existingData) {
+            $dataToUpdate = [
+                'status' => 2, 
+            ];
+    
+            if ($pemasukanModel->update($id, $dataToUpdate)) {
+                return redirect()->to('/pemasukan')->with('messageApprove', 'Berhasil approve data pemasukan.');
+            } else {
+                return redirect()->to('/pemasukan')->with('error', 'Failed to approve pemasukan.');
+            }
+        } else {
+            return redirect()->to('/pemasukan')->with('error', 'Pemasukan tidak ditemukan.');
+        }
+    }
+    
+    public function approveOwner($id)
+    {
+        $pemasukanModel = new ModelsPemasukan();
+        $existingData = $pemasukanModel->find($id);
+    
+        if ($existingData) {
+            $dataToUpdate = [
+                'status' => 3, 
+            ];
+    
+            if ($pemasukanModel->update($id, $dataToUpdate)) {
+                return redirect()->to('/pemasukan')->with('messageApprove', 'Berhasil approve data pemasukan.');
+            } else {
+                return redirect()->to('/pemasukan')->with('error', 'Failed to approve pemasukan.');
+            }
+        } else {
+            return redirect()->to('/pemasukan')->with('error', 'Pemasukan tidak ditemukan.');
+        }
+    }
+    
     
 
     

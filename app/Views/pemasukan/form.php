@@ -19,7 +19,7 @@
                                 <option value="">Pilih Product</option>
                                 <?php foreach ($product as $pro): ?>
                                     <option value="<?= $pro['id']; ?>" 
-                                        <?= ($pro['id'] == $pemasukan['product_id']) ? 'selected' : ''; ?>>
+                                        <?= (isset($pemasukan) && $pro['id'] == $pemasukan['product_id']) ? 'selected' : ''; ?>>
                                         <?= $pro['name']; ?> | <?= $pro['volume']; ?>
                                     </option>
                                 <?php endforeach; ?>
@@ -71,7 +71,7 @@
                                 <option value="">Pilih Supplier</option>
                                 <?php foreach ($supplier as $supp): ?>
                                     <option value="<?= $supp['id']; ?>" 
-                                        <?= ($supp['id'] == $pemasukan['supplier_id']) ? 'selected' : ''; ?>>
+                                        <?= (isset($pemasukan) && $supp['id'] == $pemasukan['supplier_id']) ? 'selected' : ''; ?>>
                                         <?= $supp['name']; ?>
                                     </option>
                                 <?php endforeach; ?>
@@ -87,21 +87,49 @@
                         <div class="form-group">
                             <label for="select2Single">Lampiran</label>
                             <div class="custom-file mt-3">
-                                <input type="file" name="upload" class="custom-file-input" id="customFile">
+                                <input type="file" name="upload" class="custom-file-input" id="customFile" accept="image/*">
                                 <label class="custom-file-label" for="customFile">Choose file</label>
+                            </div>
+
+                            <div id="imagePreview" class="mt-2" style="display: <?= isset($pemasukan['upload']) ? 'block' : 'none'; ?>;">
+                                <img id="previewImage" 
+                                    src="<?= isset($pemasukan['upload']) ? base_url('uploads/' . $pemasukan['upload']) : ''; ?>" 
+                                    alt="Uploaded Image" 
+                                    class="img-thumbnail" 
+                                    style="max-width: 200px;"/>
                             </div>
                         </div>
 
                     </div>
                  </div>
                  <input type="hidden" name="user_id" value="<?= session()->get('id') ?>">
-            
               
-                <button type="submit" class="btn btn-primary"><?= isset($pemasukan) ? 'Update' : 'Create'; ?></button>
+                    <button type="submit" class="btn <?= isset($pemasukan) ? 'btn-warning' : 'btn-primary'; ?>">
+                        <?= isset($pemasukan) ? 'Update' : 'Create'; ?>
+                    </button>
                 </form>
             </div>
         </div>
     </div>
 </div>
+
+<script>
+document.getElementById('customFile').addEventListener('change', function(event) {
+    const file = event.target.files[0];
+    const imagePreview = document.getElementById('imagePreview');
+    const previewImage = document.getElementById('previewImage');
+
+    if (file) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            previewImage.src = e.target.result;
+            imagePreview.style.display = 'block';
+        }
+        reader.readAsDataURL(file);
+    } else {
+        imagePreview.style.display = 'none'; 
+    }
+});
+</script>
 
 <?= $this->endSection() ?>

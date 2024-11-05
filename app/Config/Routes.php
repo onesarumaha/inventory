@@ -60,7 +60,11 @@ $routes->get('/pemasukan', [Pemasukan::class, 'index']);
 $routes->get('/pemasukan/create', [Pemasukan::class, 'create']);
 $routes->post('/pemasukan/store', [Pemasukan::class, 'store']);
 $routes->get('/pemasukan/edit/(:any)', [Pemasukan::class, 'edit/$1']);
+$routes->post('/pemasukan/update/(:any)', [Pemasukan::class, 'update/$1']);
 $routes->get('/pemasukan/download/(:any)', [Pemasukan::class, 'download/$1']);
+$routes->delete('/pemasukan/(:num)', [Pemasukan::class, 'delete/$1']);
+$routes->post('/pemasukan/approve-admin/(:any)', [Pemasukan::class, 'approveAdmin/$1']);
+$routes->post('/pemasukan/approve-owner/(:any)', [Pemasukan::class, 'approveOwner/$1']);
 
 
 // route stok product
