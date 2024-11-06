@@ -152,22 +152,6 @@
         });
     <?php endif; ?>
     
-    function confirmDelete() {
-        Swal.fire({
-            title: 'Yakin hapus data ?',
-            text: "Apakah yakin ingin menghapus data ini?",
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#d33',
-            cancelButtonColor: '#3085d6',
-            confirmButtonText: 'Iya',
-            cancelButtonText: 'Tidak'
-        }).then((result) => {
-            if (result.isConfirmed) {
-                document.getElementById('delete-form').submit();
-            }
-        });
-    }
 
     <?php if (session()->getFlashdata('messageDelete')): ?>
         Swal.fire({
@@ -187,52 +171,138 @@
         });
     <?php endif; ?>
 
-    function confirmAdmin() {
-        Swal.fire({
-            title: 'Approve data ?',
-            text: "Apakah yakin ingin approve data ini?",
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#d33',
-            cancelButtonColor: '#3085d6',
-            confirmButtonText: 'Iya',
-            cancelButtonText: 'Tidak'
-        }).then((result) => {
-            if (result.isConfirmed) {
-                document.getElementById('approve-admin').submit();
-            }
-        });
-    }
 
-    function confirmOwner() {
-        Swal.fire({
-            title: 'Approve data ?',
-            text: "Apakah yakin ingin approve data ini?",
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#d33',
-            cancelButtonColor: '#3085d6',
-            confirmButtonText: 'Iya',
-            cancelButtonText: 'Tidak'
-        }).then((result) => {
-            if (result.isConfirmed) {
-                document.getElementById('approve-owner').submit();
-            }
-        });
-    }
 
-    <?php if (session()->getFlashdata('messageApprove')): ?>
-        Swal.fire({
-            icon: 'success',
-            title: 'Approve !',
-            text: '<?= session()->getFlashdata('messageApprove'); ?>',
-            showConfirmButton: false,
-            timer: 2000
-        });
-    <?php endif; ?>
+    function confirmDelete(id) {
+          Swal.fire({
+              title: 'Yakin hapus data ?',
+              text: "Apakah yakin ingin menghapus data ini?",
+              icon: 'warning',
+              showCancelButton: true,
+              confirmButtonColor: '#d33',
+              cancelButtonColor: '#3085d6',
+              confirmButtonText: 'Iya',
+              cancelButtonText: 'Tidak'
+          }).then((result) => {
+              if (result.isConfirmed) {
+                  $.ajax({
+                      url: '<?= base_url('/pemasukan') ?>/' + id,
+                      type: 'DELETE',
+                      data: {
+                          
+                          '_csrf': '<?= csrf_hash() ?>' 
+                      },
+                      success: function(response) {
+                        if(response.success) {
+                              Swal.fire({
+                                  title: 'Berhasil!',
+                                  text: 'Berhasil hapus data pemasukan.',
+                                  icon: 'success',
+                                  timer: 2000,  
+                                  showConfirmButton: false
+                              });
+                              setTimeout(() => {
+                                  window.location.href = '/pemasukan'; 
+                              }, 2000); 
+                          } else {
+                              Swal.fire('Gagal!', 'Data tidak dapat di hapus.', 'error');
+                          }
+                      },
+                      error: function() {
+                          Swal.fire('Error!', 'Terjadi kesalahan saat menghubungi server.', 'error');
+                      }
+                  });
+              }
+          });
+      }
 
-  
 
+      function confirmAdmin(id) {
+          Swal.fire({
+              title: 'Approve data?',
+              text: "Yakin ingin approve data?",
+              icon: 'warning',
+              showCancelButton: true,
+              confirmButtonColor: '#d33',
+              cancelButtonColor: '#3085d6',
+              confirmButtonText: 'Iya',
+              cancelButtonText: 'Tidak'
+          }).then((result) => {
+              if (result.isConfirmed) {
+                  $.ajax({
+                      url: '<?= base_url('/pemasukan/approve-admin') ?>/' + id,
+                      type: 'POST',
+                      data: {
+                          
+                          '_csrf': '<?= csrf_hash() ?>' 
+                      },
+                      success: function(response) {
+                        if(response.success) {
+                              Swal.fire({
+                                  title: 'Berhasil!',
+                                  text: 'Data telah di-approve.',
+                                  icon: 'success',
+                                  timer: 2000,  
+                                  showConfirmButton: false
+                              });
+                              setTimeout(() => {
+                                  window.location.href = '/pemasukan'; 
+                              }, 2000); 
+                          } else {
+                              Swal.fire('Gagal!', 'Data tidak dapat di-approve.', 'error');
+                          }
+                      },
+                      error: function() {
+                          Swal.fire('Error!', 'Terjadi kesalahan saat menghubungi server.', 'error');
+                      }
+                  });
+              }
+          });
+      }
+
+
+      function confirmOwner(id) {
+          Swal.fire({
+              title: 'Approve data?',
+              text: "Apakah yakin ingin approve data ini?",
+              icon: 'warning',
+              showCancelButton: true,
+              confirmButtonColor: '#d33',
+              cancelButtonColor: '#3085d6',
+              confirmButtonText: 'Iya',
+              cancelButtonText: 'Tidak'
+          }).then((result) => {
+              if (result.isConfirmed) {
+                  $.ajax({
+                      url: '<?= base_url('/pemasukan/approve-owner') ?>/' + id,
+                      type: 'POST',
+                      data: {
+                          
+                          '_csrf': '<?= csrf_hash() ?>' 
+                      },
+                      success: function(response) {
+                        if(response.success) {
+                              Swal.fire({
+                                  title: 'Berhasil!',
+                                  text: 'Data telah di-approve.',
+                                  icon: 'success',
+                                  timer: 2000,  
+                                  showConfirmButton: false
+                              });
+                              setTimeout(() => {
+                                  window.location.href = '/pemasukan'; 
+                              }, 2000); 
+                          } else {
+                              Swal.fire('Gagal!', 'Data tidak dapat di-approve.', 'error');
+                          }
+                      },
+                      error: function() {
+                          Swal.fire('Error!', 'Terjadi kesalahan saat menghubungi server.', 'error');
+                      }
+                  });
+              }
+          });
+      }
 
 </script>
 </script>

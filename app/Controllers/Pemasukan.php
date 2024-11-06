@@ -220,20 +220,37 @@ class Pemasukan extends BaseController
         $existingData = $pemasukanModel->find($id);
     
         if (!$existingData) {
-            return redirect()->to('/pemasukan')->with('error', 'Pemasukan not found.');
+            return $this->response->setJSON([
+                'success' => false,
+                'message' => 'Pemasukan tidak ditemukan.'
+            ]);
         }
+    
         $filePath = FCPATH . 'uploads/' . $existingData['upload'];
     
-        if ($pemasukanModel->delete($id)) {
-            if (file_exists($filePath)) {
-                unlink($filePath);
-            }
+        try {
+            // Mulai proses penghapusan data
+            if ($pemasukanModel->delete($id)) {
+                // Cek dan hapus file jika ada
+                if (file_exists($filePath)) {
+                    unlink($filePath);
+                }
     
-            return redirect()->to('/pemasukan')->with('messageDelete', 'Berhasil hapus data pemasukan.');
-        } else {
-            return redirect()->to('/pemasukan')->with('error', 'Failed to delete pemasukan.');
+                return $this->response->setJSON([
+                    'success' => true,
+                    'message' => 'Berhasil hapus data pemasukan.'
+                ]);
+            } else {
+                throw new \Exception('Gagal menghapus data pemasukan.');
+            }
+        } catch (\Exception $e) {
+            return $this->response->setJSON([
+                'success' => false,
+                'message' => $e->getMessage()
+            ]);
         }
     }
+    
 
     public function approveAdmin($id)
     {
@@ -241,39 +258,79 @@ class Pemasukan extends BaseController
         $existingData = $pemasukanModel->find($id);
     
         if ($existingData) {
-            $dataToUpdate = [
-                'status' => 2, 
-            ];
+            $dataToUpdate = ['status' => 1]; 
     
             if ($pemasukanModel->update($id, $dataToUpdate)) {
-                return redirect()->to('/pemasukan')->with('messageApprove', 'Berhasil approve data pemasukan.');
+                return $this->response->setJSON(['success' => true]);
             } else {
-                return redirect()->to('/pemasukan')->with('error', 'Failed to approve pemasukan.');
+                return $this->response->setJSON(['success' => false]);
             }
         } else {
-            return redirect()->to('/pemasukan')->with('error', 'Pemasukan tidak ditemukan.');
+            return $this->response->setJSON(['success' => false]);
         }
     }
+    
     
     public function approveOwner($id)
     {
         $pemasukanModel = new ModelsPemasukan();
+        $productModel = new Product();
+    
         $existingData = $pemasukanModel->find($id);
     
-        if ($existingData) {
-            $dataToUpdate = [
-                'status' => 3, 
+        if (!$existingData) {
+            return $this->response->setJSON([
+                'success' => false,
+                'message' => 'Pemasukan tidak ditemukan.'
+            ]);
+        }
+    
+        $dataToUpdate = [
+            'status' => 2, 
+        ];
+    
+        $db = \Config\Database::connect();
+        $db->transBegin();
+    
+        try {
+            if (!$pemasukanModel->update($id, $dataToUpdate)) {
+                throw new \Exception('Gagal mengupdate status pemasukan.');
+            }
+    
+            $productId = $existingData['product_id'];
+            $quantityToAdd = $existingData['quantity']; 
+    
+            $product = $productModel->find($productId);
+            if (!$product) {
+                throw new \Exception('Produk tidak ditemukan.');
+            }
+    
+            $newStock = $product['stock'] + $quantityToAdd;
+            $productUpdateData = [
+                'stock' => $newStock,
             ];
     
-            if ($pemasukanModel->update($id, $dataToUpdate)) {
-                return redirect()->to('/pemasukan')->with('messageApprove', 'Berhasil approve data pemasukan.');
-            } else {
-                return redirect()->to('/pemasukan')->with('error', 'Failed to approve pemasukan.');
+            if (!$productModel->update($productId, $productUpdateData)) {
+                throw new \Exception('Gagal mengupdate stok produk.');
             }
-        } else {
-            return redirect()->to('/pemasukan')->with('error', 'Pemasukan tidak ditemukan.');
+    
+            $db->transCommit();
+            return $this->response->setJSON([
+                'success' => true,
+                'message' => 'Berhasil approve data pemasukan dan stock berhasil diperbarui.'
+            ]);
+    
+        } catch (\Exception $e) {
+            $db->transRollback();
+            return $this->response->setJSON([
+                'success' => false,
+                'message' => $e->getMessage()
+            ]);
         }
     }
+    
+
+    
     
     
 

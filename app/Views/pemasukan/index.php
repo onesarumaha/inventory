@@ -65,40 +65,27 @@
                     </td>
 
                     <td style="display: flex; align-items: center;">
-                    <?php if (session()->get('role') === 'petugas'): ?>
-   
-                    <a href="<?= base_url('/pemasukan/edit') ?>/<?= $pemasukan['id'] ?>" class="btn btn-warning" style="margin-right: 5px;">
-                            <i class="fas fa-pen"></i>
-                        </a>
-                        <form id="delete-form" action="<?= base_url('/pemasukan') ?>/<?= $pemasukan['id'] ?>" method="post" style="margin: 0;">
-                            <input type="hidden" name="_method" value="DELETE">
-                            <?= csrf_field(); ?>
-                            <button type="button" class="btn btn-danger" onclick="confirmDelete()">
+                        <?php if (session()->get('role') === 'petugas'): ?>
+                            <a href="<?= base_url('/pemasukan/edit') ?>/<?= $pemasukan['id'] ?>" class="btn btn-warning" style="margin-right: 5px;">
+                                <i class="fas fa-pen"></i>
+                            </a>
+                            <a href="javascript:void(0);" class="btn btn-danger" onclick="confirmDelete(<?= $pemasukan['id'] ?>)">
                                 <i class="fas fa-trash"></i>
-                            </button>
-                        </form>
+                            </a>
                         <?php endif; ?>
-
+                        
 
                         <?php if (session()->get('role') === 'admin'): ?>
-                            <form id="approve-admin" action="<?= base_url('/pemasukan/approve-admin') ?>/<?= $pemasukan['id'] ?>" method="post" style="margin: 0;">
-                                <input type="hidden" name="_method" value="POST">
-                                <?= csrf_field(); ?>
-                                <button type="button" class="btn btn-warning" onclick="confirmAdmin()">
-                                    <i class="fas fa-check"></i>
+                            <a href="javascript:void(0);" class="btn btn-warning" onclick="confirmAdmin(<?= $pemasukan['id'] ?>)">
+                                <i class="fas fa-check"></i>
+                            </a>
 
-                                </button>
-                            </form>
                         <?php elseif (session()->get('role') === 'owner'): ?>
-                            <form id="approve-owner" action="<?= base_url('/pemasukan/approve-owner') ?>/<?= $pemasukan['id'] ?>" method="post" style="margin: 0;">
-                                <input type="hidden" name="_method" value="POST">
-                                <?= csrf_field(); ?>
-                                <button type="button" class="btn btn-success" onclick="confirmOwner()">
-                                    <i class="fas fa-solid fa-thumbs-up"></i>
-                                 </button>
-                            </form>
+                            <a href="javascript:void(0);" class="btn btn-success" onclick="confirmOwner(<?= $pemasukan['id'] ?>)">
+                                <i class="fas fa-thumbs-up"></i>
+                            </a>
                         <?php endif; ?>
-
+                            
                     </td>
 
                 </tr>
