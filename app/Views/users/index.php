@@ -44,13 +44,9 @@
                         <a href="<?= base_url('/users/edit') ?>/<?= $user['id'] ?>" class="btn btn-warning" style="margin-right: 5px;">
                             <i class="fas fa-pen"></i>
                         </a>
-                        <form id="delete-form" action="<?= base_url('/user') ?>/<?= $user['id'] ?>" method="post" style="margin: 0;">
-                            <input type="hidden" name="_method" value="DELETE">
-                            <?= csrf_field(); ?>
-                            <button type="button" class="btn btn-danger" onclick="confirmDelete()">
+                        <a href="javascript:void(0);" class="btn btn-danger" onclick="confirmDeleteUser(<?= $user['id'] ?>)">
                                 <i class="fas fa-trash"></i>
-                            </button>
-                        </form>
+                        </a>
                     </td>
                 </tr>
                 <?php endforeach; ?>

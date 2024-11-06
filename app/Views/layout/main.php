@@ -171,6 +171,179 @@
         });
     <?php endif; ?>
 
+    function confirmDeleteSupplier(id) {
+          Swal.fire({
+              title: 'Hapus Supplier ?',
+              text: "Yakin ingin menghapus data ini?",
+              icon: 'warning',
+              showCancelButton: true,
+              confirmButtonColor: '#d33',
+              cancelButtonColor: '#3085d6',
+              confirmButtonText: 'Iya',
+              cancelButtonText: 'Tidak'
+          }).then((result) => {
+              if (result.isConfirmed) {
+                  $.ajax({
+                      url: '<?= base_url('/supplier') ?>/' + id,
+                      type: 'DELETE',
+                      data: {
+                          
+                          '_csrf': '<?= csrf_hash() ?>' 
+                      },
+                      success: function(response) {
+                        if(response.success) {
+                              Swal.fire({
+                                  title: 'Berhasil!',
+                                  text: 'Berhasil hapus data supplier.',
+                                  icon: 'success',
+                                  timer: 2000,  
+                                  showConfirmButton: false
+                              });
+                              setTimeout(() => {
+                                  window.location.href = '/supplier'; 
+                              }, 2000); 
+                          } else {
+                              Swal.fire('Gagal!', 'Data tidak dapat di hapus.', 'error');
+                          }
+                      },
+                      error: function() {
+                          Swal.fire('Error!', 'Terjadi kesalahan saat menghubungi server.', 'error');
+                      }
+                  });
+              }
+          });
+      }
+
+
+      function confirmDeleteCustomer(id) {
+          Swal.fire({
+              title: 'Hapus Customer ?',
+              text: "Yakin ingin menghapus data ini?",
+              icon: 'warning',
+              showCancelButton: true,
+              confirmButtonColor: '#d33',
+              cancelButtonColor: '#3085d6',
+              confirmButtonText: 'Iya',
+              cancelButtonText: 'Tidak'
+          }).then((result) => {
+              if (result.isConfirmed) {
+                  $.ajax({
+                      url: '<?= base_url('/customer') ?>/' + id,
+                      type: 'DELETE',
+                      data: {
+                          
+                          '_csrf': '<?= csrf_hash() ?>' 
+                      },
+                      success: function(response) {
+                        if(response.success) {
+                              Swal.fire({
+                                  title: 'Berhasil!',
+                                  text: 'Berhasil hapus data customer.',
+                                  icon: 'success',
+                                  timer: 2000,  
+                                  showConfirmButton: false
+                              });
+                              setTimeout(() => {
+                                  window.location.href = '/customer'; 
+                              }, 2000); 
+                          } else {
+                              Swal.fire('Gagal!', 'Data tidak dapat di hapus.', 'error');
+                          }
+                      },
+                      error: function() {
+                          Swal.fire('Error!', 'Terjadi kesalahan saat menghubungi server.', 'error');
+                      }
+                  });
+              }
+          });
+      }
+
+      function confirmDeleteProduct(id) {
+          Swal.fire({
+              title: 'Hapus Product ?',
+              text: "Yakin ingin menghapus data ini?",
+              icon: 'warning',
+              showCancelButton: true,
+              confirmButtonColor: '#d33',
+              cancelButtonColor: '#3085d6',
+              confirmButtonText: 'Iya',
+              cancelButtonText: 'Tidak'
+          }).then((result) => {
+              if (result.isConfirmed) {
+                  $.ajax({
+                      url: '<?= base_url('/product') ?>/' + id,
+                      type: 'DELETE',
+                      data: {
+                          
+                          '_csrf': '<?= csrf_hash() ?>' 
+                      },
+                      success: function(response) {
+                        if(response.success) {
+                              Swal.fire({
+                                  title: 'Berhasil!',
+                                  text: 'Berhasil hapus data product.',
+                                  icon: 'success',
+                                  timer: 2000,  
+                                  showConfirmButton: false
+                              });
+                              setTimeout(() => {
+                                  window.location.href = '/product'; 
+                              }, 2000); 
+                          } else {
+                              Swal.fire('Gagal!', 'Data tidak dapat di hapus.', 'error');
+                          }
+                      },
+                      error: function() {
+                          Swal.fire('Error!', 'Terjadi kesalahan saat menghubungi server.', 'error');
+                      }
+                  });
+              }
+          });
+      }
+
+      function confirmDeleteUser(id) {
+          Swal.fire({
+              title: 'Hapus User ?',
+              text: "Yakin ingin menghapus data ini?",
+              icon: 'warning',
+              showCancelButton: true,
+              confirmButtonColor: '#d33',
+              cancelButtonColor: '#3085d6',
+              confirmButtonText: 'Iya',
+              cancelButtonText: 'Tidak'
+          }).then((result) => {
+              if (result.isConfirmed) {
+                  $.ajax({
+                      url: '<?= base_url('/user') ?>/' + id,
+                      type: 'DELETE',
+                      data: {
+                          
+                          '_csrf': '<?= csrf_hash() ?>' 
+                      },
+                      success: function(response) {
+                        if(response.success) {
+                              Swal.fire({
+                                  title: 'Berhasil!',
+                                  text: 'Berhasil hapus data user.',
+                                  icon: 'success',
+                                  timer: 2000,  
+                                  showConfirmButton: false
+                              });
+                              setTimeout(() => {
+                                  window.location.href = '/user'; 
+                              }, 2000); 
+                          } else {
+                              Swal.fire('Gagal!', 'Data tidak dapat di hapus.', 'error');
+                          }
+                      },
+                      error: function() {
+                          Swal.fire('Error!', 'Terjadi kesalahan saat menghubungi server.', 'error');
+                      }
+                  });
+              }
+          });
+      }
+
 
 
     function confirmDelete(id) {

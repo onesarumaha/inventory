@@ -104,11 +104,22 @@ class Customer extends BaseController
 
     public function delete($id)
     {
-        $customerModel = new ModelsCustomer();
-        if ($customerModel->delete($id)) {
-            return redirect()->to('/customer')->with('messageDelete', 'customer deleted successfully.');
-        } else {
-            return redirect()->to('/customer')->with('error', 'Failed to delete customer.');
+        $model = new ModelsCustomer();
+    
+        try {
+            if ($model->delete($id)) {
+                return $this->response->setJSON([
+                    'success' => true,
+                    'message' => 'Customer deleted successfully.'
+                ]);
+            } else {
+                throw new \Exception('Failed to delete customer.');
+            }
+        } catch (\Exception $e) {
+            return $this->response->setJSON([
+                'success' => false,
+                'message' => $e->getMessage()
+            ]);
         }
     }
 

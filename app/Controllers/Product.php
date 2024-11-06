@@ -109,13 +109,25 @@ class Product extends BaseController
         return redirect()->to('/product')->with('message', 'Product successfully updated.');
     }
 
+
     public function delete($id)
     {
-        $productModel = new ModelsProduct();
-        if ($productModel->delete($id)) {
-            return redirect()->to('/product')->with('messageDelete', 'Product deleted successfully.');
-        } else {
-            return redirect()->to('/product')->with('error', 'Failed to delete product.');
+        $model = new ModelsProduct();
+    
+        try {
+            if ($model->delete($id)) {
+                return $this->response->setJSON([
+                    'success' => true,
+                    'message' => 'Product deleted successfully.'
+                ]);
+            } else {
+                throw new \Exception('Failed to delete product.');
+            }
+        } catch (\Exception $e) {
+            return $this->response->setJSON([
+                'success' => false,
+                'message' => $e->getMessage()
+            ]);
         }
     }
 

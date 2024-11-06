@@ -83,11 +83,22 @@ class Users extends BaseController
 
     public function delete($id)
     {
-        $usersModel = new ModelsUsers();
-        if ($usersModel->delete($id)) {
-            return redirect()->to('/users')->with('messageDelete', 'users deleted successfully.');
-        } else {
-            return redirect()->to('/users')->with('error', 'Failed to delete users.');
+        $model = new ModelsUsers();
+    
+        try {
+            if ($model->delete($id)) {
+                return $this->response->setJSON([
+                    'success' => true,
+                    'message' => 'User deleted successfully.'
+                ]);
+            } else {
+                throw new \Exception('Failed to delete user.');
+            }
+        } catch (\Exception $e) {
+            return $this->response->setJSON([
+                'success' => false,
+                'message' => $e->getMessage()
+            ]);
         }
     }
 }

@@ -229,9 +229,7 @@ class Pemasukan extends BaseController
         $filePath = FCPATH . 'uploads/' . $existingData['upload'];
     
         try {
-            // Mulai proses penghapusan data
             if ($pemasukanModel->delete($id)) {
-                // Cek dan hapus file jika ada
                 if (file_exists($filePath)) {
                     unlink($filePath);
                 }

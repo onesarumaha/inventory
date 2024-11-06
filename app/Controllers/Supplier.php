@@ -106,12 +106,24 @@ class Supplier extends BaseController
     public function delete($id)
     {
         $supplierModel = new ModelsSupplier();
-        if ($supplierModel->delete($id)) {
-            return redirect()->to('/supplier')->with('messageDelete', 'Supplier deleted successfully.');
-        } else {
-            return redirect()->to('/supplier')->with('error', 'Failed to delete supplier.');
+    
+        try {
+            if ($supplierModel->delete($id)) {
+                return $this->response->setJSON([
+                    'success' => true,
+                    'message' => 'Supplier deleted successfully.'
+                ]);
+            } else {
+                throw new \Exception('Failed to delete supplier.');
+            }
+        } catch (\Exception $e) {
+            return $this->response->setJSON([
+                'success' => false,
+                'message' => $e->getMessage()
+            ]);
         }
     }
+    
     
     
 
