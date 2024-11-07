@@ -3,6 +3,7 @@
 namespace App\Controllers;
 
 use App\Controllers\BaseController;
+use App\Models\Laporan;
 use App\Models\Pemasukan as ModelsPemasukan;
 use App\Models\Product;
 use App\Models\Supplier;
@@ -85,7 +86,6 @@ class Pemasukan extends BaseController
         $fileName = null; 
         $file = $this->request->getFile('upload');
         if ($file && $file->isValid() && !$file->hasMoved()) {
-            // $filePath = WRITEPATH . 'uploads';
             $filePath = FCPATH . 'uploads'; 
 
             $fileName = $file->getRandomName();
@@ -107,14 +107,28 @@ class Pemasukan extends BaseController
             'upload' => isset($fileName) ? $fileName : null,  
         ];
     
-        log_message('debug', 'Data to insert: ' . json_encode($data));
-    
         $pemasukanModel = new ModelsPemasukan();
-        if ($pemasukanModel->insert($data)) {
-            return redirect()->to('/pemasukan')->with('message', 'Data berhasil disimpan.');
+        $insertedId = $pemasukanModel->insert($data); 
+
+        if ($insertedId) {
+            $dataLaporan = [
+                'product_id' => $this->request->getPost('product_id'),
+                'parant_id' => $insertedId, 
+                'quantity' => $this->request->getPost('quantity'),
+                'date' => date('Y-m-d'),
+                'type' => 'in', 
+                'user_id' => $this->request->getPost('user_id'),
+                'from' => 'pengadaan-barang',
+            ];
+
+            $laporan = new Laporan();
+            $laporan->insert($dataLaporan);
+
+            return redirect()->to('/pemasukan')->with('message', 'Data berhasil disimpan ');
         } else {
-            return redirect()->back()->withInput()->with('errors', ['error' => 'Failed to save data.']);
+            return redirect()->back()->withInput()->with('errors', ['error' => 'Failed to save data to pemasukan.']);
         }
+
     }
 
     public function edit($id)
@@ -167,7 +181,6 @@ class Pemasukan extends BaseController
         $fileName = $existingData['upload']; 
         $file = $this->request->getFile('upload');
     
-        // Handle file upload
         if ($file && $file->isValid() && !$file->hasMoved()) {
             $filePath = FCPATH . 'uploads'; 
     
@@ -195,9 +208,21 @@ class Pemasukan extends BaseController
         log_message('debug', 'Data to update: ' . json_encode($data));
         
         if ($pemasukanModel->update($id, $data)) {
-            return redirect()->to('/pemasukan')->with('message', 'Data berhasil diupdate.');
+            $dataLaporan = [
+                'product_id' => $this->request->getPost('product_id'),
+                'parant_id' => $id,
+                'quantity' => $this->request->getPost('quantity'),
+                'user_id' => $this->request->getPost('user_id'),
+                'from' => 'pengadaan-barang',
+            ];
+    
+            $laporanModel = new Laporan();
+            
+            $laporanModel->where('parant_id', $id)->set($dataLaporan)->update();
+    
+            return redirect()->to('/pemasukan')->with('message', 'Data berhasil diupdate ');
         } else {
-            return redirect()->back()->withInput()->with('errors', ['error' => 'Failed to update data.']);
+            return redirect()->back()->withInput()->with('errors', ['error' => 'Failed to update data in pemasukan.']);
         }
     }
     
@@ -217,6 +242,7 @@ class Pemasukan extends BaseController
     public function delete($id)
     {
         $pemasukanModel = new ModelsPemasukan();
+        $laporanModel = new Laporan();
         $existingData = $pemasukanModel->find($id);
     
         if (!$existingData) {
@@ -233,7 +259,9 @@ class Pemasukan extends BaseController
                 if (file_exists($filePath)) {
                     unlink($filePath);
                 }
-    
+
+                $laporanModel->where('parant_id', $id)->delete();
+
                 return $this->response->setJSON([
                     'success' => true,
                     'message' => 'Berhasil hapus data pemasukan.'
@@ -326,6 +354,8 @@ class Pemasukan extends BaseController
             ]);
         }
     }
+
+    
     
 
     

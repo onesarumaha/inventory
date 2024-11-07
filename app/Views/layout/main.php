@@ -15,6 +15,8 @@
   <link href="<?= base_url('frontend/assets/') ?>vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
   <link href="<?= base_url('frontend/assets/') ?>vendor/select2/dist/css/select2.min.css" rel="stylesheet" type="text/css">
   <link href="<?= base_url('frontend/assets/') ?>vendor/bootstrap-datepicker/css/bootstrap-datepicker.min.css" rel="stylesheet" >
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
 </head>
 <body id="page-top">
   <div id="wrapper">

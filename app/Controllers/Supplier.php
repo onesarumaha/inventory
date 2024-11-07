@@ -125,6 +125,42 @@ class Supplier extends BaseController
     }
     
     
+    public function tambah()
+    {
+        $response = ['success' => false, 'message' => 'Failed to add supplier.'];
+        $supplierModel = new ModelsSupplier(); 
+    
+        if ($this->request->getMethod() === 'POST') {
+            $data = [
+                'name' => $this->request->getPost('name'),
+                'email' => $this->request->getPost('email'),
+                'phone' => $this->request->getPost('phone'),
+                'address' => $this->request->getPost('address'),
+            ];
+    
+            if ($supplierModel->save($data)) {
+                $insertID = $supplierModel->db->insertID();
+    
+                $response = [
+                    'success' => true,
+                    'data' => [
+                        'id' => $insertID,
+                        'name' => $data['name'],
+                        'email' => $data['email'],
+                        'phone' => $data['phone'],
+                        'address' => $data['address'],
+                    ]
+                ];
+            } else {
+                $response['message'] = 'Error: ' . implode(', ', $supplierModel->errors());
+            }
+        } else {
+            $response['message'] = 'Invalid request method.';
+        }
+    
+        return $this->response->setJSON($response);
+    }
+    
     
 
     

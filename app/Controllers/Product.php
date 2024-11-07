@@ -131,4 +131,43 @@ class Product extends BaseController
         }
     }
 
+    public function tambah()
+    {
+        $response = ['success' => false, 'message' => 'Failed to add product.'];
+        $productModel = new ModelsProduct(); 
+    
+        if ($this->request->getMethod() === 'POST') {
+            $data = [
+                'name' => $this->request->getPost('name'),
+                'volume' => $this->request->getPost('volume'),
+                'price' => $this->request->getPost('price'),
+                'stock' => $this->request->getPost('stock'),
+            ];
+    
+            if ($productModel->save($data)) {
+                $insertID = $productModel->db->insertID();
+    
+                $response = [
+                    'success' => true,
+                    'data' => [
+                        'id' => $insertID,
+                        'name' => $data['name'],
+                        'volume' => $data['volume'],
+                        'price' => $data['price'],
+                        'stock' => $data['stock'],
+                    ]
+                ];
+            } else {
+                $response['message'] = 'Error: ' . implode(', ', $productModel->errors());
+            }
+        } else {
+            $response['message'] = 'Invalid request method.';
+        }
+    
+        return $this->response->setJSON($response);
+    }
+    
+
+
+
 }

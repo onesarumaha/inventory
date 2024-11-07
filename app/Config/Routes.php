@@ -34,6 +34,7 @@ $routes->post('/supplier/store', [Supplier::class, 'store']);
 $routes->get('/supplier/edit/(:segment)', [Supplier::class, 'edit/$1']);
 $routes->post('/supplier/update/(:segment)', [Supplier::class, 'update/$1']);
 $routes->delete('/supplier/(:num)', [Supplier::class, 'delete/$1']);
+$routes->post('/supplier/tambah', [Supplier::class, 'tambah']);
 
 // route customer
 $routes->get('/customer', [Customer::class, 'index']);
@@ -50,6 +51,7 @@ $routes->post('/product/store', [Product::class, 'store']);
 $routes->get('/product/edit/(:segment)', [Product::class, 'edit/$1']);
 $routes->post('/product/update/(:segment)', [Product::class, 'update/$1']);
 $routes->delete('/product/(:num)', [Product::class, 'delete/$1']);
+$routes->post('/product/tambah', [Product::class, 'tambah']);
 
 // route pengeluaran
 $routes->get('/pengeluaran', [Transaksi::class, 'index']);
