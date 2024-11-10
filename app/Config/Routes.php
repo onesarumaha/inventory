@@ -56,6 +56,7 @@ $routes->post('/product/tambah', [Product::class, 'tambah']);
 // route pengeluaran
 $routes->get('/pengeluaran', [Transaksi::class, 'index']);
 $routes->get('/pengeluaran/create', [Transaksi::class, 'create']);
+$routes->get('/pengeluaran/details/(:num)', [Transaksi::class, 'getProductDetails/$1']);
 
 // route pemasukan
 $routes->get('/pemasukan', [Pemasukan::class, 'index']);

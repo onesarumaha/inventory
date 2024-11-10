@@ -9,15 +9,14 @@
                 <h6 class="m-0 font-weight-bold text-primary"><?= $title ?></h6>
             </div>
             <div class="card-body">
-            <form action="<?= isset($pengeluaran) ? base_url('/pengeluaran/update/'.$pengeluaran['id']) : base_url('/pengeluaran/store'); ?>" method="POST">
-            <?= csrf_field(); ?>
-                 <div class="row">
-                    <div class="form-group col-md-6">
-                        <div class="form-group">
+                <form action="<?= isset($pengeluaran) ? base_url('/pengeluaran/update/'.$pengeluaran['id']) : base_url('/pengeluaran/store'); ?>" method="POST">
+                    <?= csrf_field(); ?>
+                    <div class="row">
+                        <div class="form-group col-md-6">
                             <label for="select2Single">Nama Pelanggan</label>
                             <select class="select2-single form-control" name="customer_id" id="select2Single">
-                            <option value="">Pilih pelanggan</option>
-                                <?php foreach($customer as $cus ): ?>
+                                <option value="">Pilih pelanggan</option>
+                                <?php foreach($customer as $cus): ?>
                                     <option value="<?= $cus['id']; ?>"><?= $cus['name']; ?></option>
                                 <?php endforeach ?>
                             </select>
@@ -28,9 +27,7 @@
                             <?php endif; ?>
                         </div>
 
-                    </div>
-
-                    <div class="form-group col-md-6">
+                        <div class="form-group col-md-6">
                         <div class="form-group" id="simple-date1">
                             <label for="simpleDataInput">Tanggal</label>
                             <div class="input-group date">
@@ -42,66 +39,155 @@
                         </div>
 
                     </div>
-                 </div>
+                    </div>
 
-                 <div class="row">
-                    <div class="form-group col-md-12">
                     <div class="row">
-                        <div class="form-group col-md-4">
-                        <label for="select2SingleProduct">Nama Product</label>
-                            <select class="select2-single form-control" name="product_id" id="select2SingleProduct">
-                            <option value="">Pilih product</option>
-                            <option value="Aceh">Aceh</option>
-                            </select>
-                            <?php if (session()->getFlashdata('errors')['product_id'] ?? null): ?>
-                                <div style="color: red;">
-                                    <?= session()->getFlashdata('errors')['product_id']; ?>
+                        <div class="form-group col-md-6">
+                            <div class="row" id="productContainer">
+                            <div class="form-group col-md-4">
+                                <label for="select2SingleProduct_0">Nama Product</label>
+                                <div class="input-group">
+                                    <select class="select2-single form-control product-select" name="product_id[]" id="select2SingleProduct_0">
+                                        <option value="">Pilih Product</option>
+                                        <?php foreach ($product as $pro): ?>
+                                            <option value="<?= $pro['id']; ?>" 
+                                                <?= (isset($pemasukan) && $pro['id'] == $pemasukan['product_id']) ? 'selected' : ''; ?>>
+                                                <?= $pro['name']; ?> | <?= $pro['volume']; ?>
+                                            </option>
+                                        <?php endforeach; ?>
+                                    </select>
                                 </div>
-                            <?php endif; ?>
+                                <?php if (session()->getFlashdata('errors')['product_id'] ?? null): ?>
+                                    <div style="color: red;">
+                                        <?= session()->getFlashdata('errors')['product_id']; ?>
+                                    </div>
+                                <?php endif; ?>
+                            </div>
+
+                            <div class="form-group col-md-2">
+                                <label for="price_0">Harga</label>
+                                <input type="text" class="form-control form-control-sm" name="price[]" id="price_0" placeholder="Price" readonly>
+                            </div>
+
+                            <div class="form-group col-md-2">
+                                <label for="stock_0">Stock</label>
+                                <input type="number" class="form-control form-control-sm" id="stock_0" placeholder="Stock" readonly>
+                            </div>
+
+                            <div class="form-group col-md-2">
+                                <label for="quantity_0">Quantity</label>
+                                <input type="number" class="form-control form-control-sm" name="quantity[]" id="quantity_0" placeholder="Quantity" value="<?= old('quantity', isset($pemasukan) ? $pemasukan['quantity'] : ''); ?>">
+                            </div>
+
+                            <div class="form-group col-md-2"> <br>
+                                <button type="button" class="btn btn-danger btn-sm remove-item">-</button>
+                                <button type="button" class="btn btn-success btn-sm add-item">+</button>
+                            </div>
                         </div>
 
 
-                        <div class="form-group col-md-2">
-                        <label for="exampleInputHP1">Harga</label>
-                            <input type="number" class="form-control form-control-sm" id="exampleInputHP1" aria-describedby="emailHelp" placeholder="Price" readonly>
-                        </div>
-                   
-                        <div class="form-group col-md-2">
-                        <label for="exampleInputHP1">Stock</label>
-                            <input type="number" class="form-control form-control-sm" id="exampleInputHP1" aria-describedby="emailHelp"
-                            placeholder="Stock" readonly>
-                        </div>
+                            </div>
 
-                        <div class="form-group col-md-2">
-                        <label for="exampleInputHP1">Quantity</label>
-                            <input type="number" class="form-control form-control-sm" name="quantity" id="exampleInputHP1" aria-describedby="emailHelp"
-                            placeholder="Quantity" value="<?= old('quantity', isset($product) ? $product['quantity'] : ''); ?>">
-                            <?php if (session()->getFlashdata('errors')['quantity'] ?? null): ?>
-                                <div style="color: red;">
-                                    <?= session()->getFlashdata('errors')['quantity']; ?>
-                                </div>
-                            <?php endif; ?>
+                            <div class="form-group col-md-6">
+                                harag
+                            </div>
                         </div>
-
-                        <div class="form-group col-md-2 mt-2"><br>
-                            <a href="#" class="btn btn-danger btn-sm kurangi">
-                                <b>-</b>
-                            </a>
-
-                            <a href="#" class="btn btn-primary btn-sm tambahi">
-                                <b>+</b>
-                            </a>
-                        </div>
-                    </div>
-
-                    </div>
-                 </div>
-              
-                <button type="submit" class="btn btn-primary"><?= isset($product) ? 'Update' : 'Create'; ?></button>
-                </form>
+                        <button type="submit" class="btn btn-primary"><?= isset($pengeluaran) ? 'Update' : 'Create'; ?></button>
+                    </form>
+                </div>
             </div>
         </div>
     </div>
-</div>
+
+<script>
+$(document).ready(function() {
+    $('.select2-single').select2();
+
+    $(document).on('change', '.product-select', function() {
+        const index = $(this).attr('id').split('_')[1]; 
+        const productId = $(this).val();
+        
+        if (productId) {
+            $.ajax({
+                url: `<?= base_url('pengeluaran/details'); ?>/${productId}`,
+                type: 'GET',
+                dataType: 'json',
+                success: function(response) {
+                    if (response.success) {
+                        $(`#price_${index}`).val(formatRupiah(response.price));
+                        $(`#stock_${index}`).val(response.stock);
+                    } else {
+                        alert('Product details not found.');
+                    }
+                },
+                error: function() {
+                    alert('Error retrieving product details.');
+                }
+            });
+        } else {
+            $(`#price_${index}`).val('');
+            $(`#stock_${index}`).val('');
+        }
+    });
+
+    function formatRupiah(angka) {
+        return 'Rp. ' + angka.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+    }
+
+    $(document).on('click', '.add-item', function() {
+        const index = $('#productContainer').children().length; 
+        let newItem = `
+        <div class="row">
+           <div class="form-item" id="product_${index}">
+                <div class="row">
+                    <div>
+                     <div class="form-group col-md-6 ml-4" >
+                        <label for="select2SingleProduct_${index}">Nama Product</label>
+                        <div class="input-group" style="width: 240px;">
+                            <select  class="select2-single form-control product-select" name="product_id[]" id="select2SingleProduct_${index}">
+                                <option value="">Pilih Product</option>
+                                <?php foreach ($product as $pro): ?>
+                                    <option value="<?= $pro['id']; ?>"><?= $pro['name']; ?> | <?= $pro['volume']; ?></option>
+                                <?php endforeach; ?>
+                            </select>
+                        </div>
+                    </div>
+                    </div>
+                    <div class="form-group col-md-2">
+                        <label for="price_${index}">Harga</label>
+                        <input type="text" class="form-control form-control-sm" name="price[]" id="price_${index}" placeholder="Price" readonly>
+                    </div>
+
+                    <div class="form-group col-md-2">
+                        <label for="stock_${index}">Stock</label>
+                        <input type="number" class="form-control form-control-sm" id="stock_${index}" placeholder="Stock" readonly>
+                    </div>
+
+                    <!-- Kuantitas -->
+                    <div class="form-group col-md-2">
+                        <label for="quantity_${index}">Quantity</label>
+                        <input type="number" class="form-control form-control-sm" name="quantity[]" id="quantity_${index}" placeholder="Quantity">
+                    </div>
+
+                    <!-- Tombol Hapus -->
+                    <div class="form-group col-md-1 d-flex align-items-center justify-content-center">
+                        <button type="button" class="btn btn-danger btn-sm remove-item">-</button>
+                    </div>
+                </div>
+            </div>
+            </div>
+
+        `;
+        $('#productContainer').append(newItem);
+        $(`#select2SingleProduct_${index}`).select2();
+    });
+    
+
+    $(document).on('click', '.remove-item', function() {
+        $(this).closest('.form-item').remove();
+    });
+});
+
+</script>
 
 <?= $this->endSection() ?>
