@@ -34,7 +34,7 @@
                                 <div class="input-group-prepend">
                                 <span class="input-group-text"><i class="fas fa-calendar"></i></span>
                                 </div>
-                                <input type="text" name="date" class="form-control form-control-sm" id="simpleDataInput">
+                                <input type="text" name="date" class="form-control form-control-sm" id="simpleDataInput" disabled>
                             </div>
                         </div>
 
@@ -44,6 +44,8 @@
                     <div class="row">
                         <div class="form-group col-md-6">
                             <div class="row" id="productContainer">
+                            <div class="row form-item ml-0" id="product_0">
+
                             <div class="form-group col-md-4">
                                 <label for="select2SingleProduct_0">Nama Product</label>
                                 <div class="input-group">
@@ -84,14 +86,22 @@
                                 <button type="button" class="btn btn-success btn-sm add-item">+</button>
                             </div>
                         </div>
+                            </div>
 
 
                             </div>
 
                             <div class="form-group col-md-6">
-                                harag
+                                    <div class="card bg-success text-white">
+                                        <div class="card-body">
+                                        Grand Total
+                                        <div class="text-white-90 small grand-total"></div>
+                                        </div>
+                                    </div>
                             </div>
                         </div>
+                        <input type="hidden" name="user_id" value="<?= session()->get('id') ?>">
+
                         <button type="submit" class="btn btn-primary"><?= isset($pengeluaran) ? 'Update' : 'Create'; ?></button>
                     </form>
                 </div>
@@ -186,6 +196,39 @@ $(document).ready(function() {
     $(document).on('click', '.remove-item', function() {
         $(this).closest('.form-item').remove();
     });
+});
+
+
+$(document).ready(function() {
+    $('.select2-single').select2();
+
+    function formatRupiah(angka) {
+        return 'Rp. ' + angka.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+    }
+
+    function calculateGrandTotal() {
+        let grandTotal = 0;
+        $('#productContainer .form-item').each(function() {
+            const price = parseInt($(this).find('input[name="price[]"]').val().replace(/[^0-9]/g, '')) || 0;
+            const quantity = parseInt($(this).find('input[name="quantity[]"]').val()) || 0;
+            
+            const subtotal = price * quantity;
+            
+            grandTotal += subtotal;
+        });
+        
+        $('.grand-total').text(formatRupiah(grandTotal));
+    }
+
+    $(document).on('input', 'input[name="price[]"], input[name="quantity[]"]', function() {
+        calculateGrandTotal();
+    });
+
+    $(document).on('click', '.add-item, .remove-item', function() {
+        calculateGrandTotal();
+    });
+
+    calculateGrandTotal();
 });
 
 </script>
