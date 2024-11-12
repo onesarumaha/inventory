@@ -81,11 +81,12 @@
                                 <input type="number" class="form-control form-control-sm" name="quantity[]" id="quantity_0" placeholder="Quantity" value="<?= old('quantity', isset($pemasukan) ? $pemasukan['quantity'] : ''); ?>">
                             </div>
 
-                            <div class="form-group col-md-2"> <br>
+                            <div class="form-group col-md-2 d-flex align-items-center">
                                 <button type="button" class="btn btn-danger btn-sm remove-item">-</button>
-                                <button type="button" class="btn btn-success btn-sm add-item">+</button>
+                                <button type="button" class="btn btn-success btn-sm add-item mr-1">+</button>
+
                             </div>
-                        </div>
+                            </div>
                             </div>
 
 
@@ -145,49 +146,37 @@ $(document).ready(function() {
     }
 
     $(document).on('click', '.add-item', function() {
-        const index = $('#productContainer').children().length; 
+        const index = $('#productContainer .form-item').length;
         let newItem = `
-        <div class="row">
-           <div class="form-item" id="product_${index}">
-                <div class="row">
-                    <div>
-                     <div class="form-group col-md-6 ml-4" >
-                        <label for="select2SingleProduct_${index}">Nama Product</label>
-                        <div class="input-group" style="width: 240px;">
-                            <select  class="select2-single form-control product-select" name="product_id[]" id="select2SingleProduct_${index}">
-                                <option value="">Pilih Product</option>
-                                <?php foreach ($product as $pro): ?>
-                                    <option value="<?= $pro['id']; ?>"><?= $pro['name']; ?> | <?= $pro['volume']; ?></option>
-                                <?php endforeach; ?>
-                            </select>
-                        </div>
-                    </div>
-                    </div>
-                    <div class="form-group col-md-2">
-                        <label for="price_${index}">Harga</label>
-                        <input type="text" class="form-control form-control-sm" name="price[]" id="price_${index}" placeholder="Price" readonly>
-                    </div>
-
-                    <div class="form-group col-md-2">
-                        <label for="stock_${index}">Stock</label>
-                        <input type="number" class="form-control form-control-sm" id="stock_${index}" placeholder="Stock" readonly>
-                    </div>
-
-                    <!-- Kuantitas -->
-                    <div class="form-group col-md-2">
-                        <label for="quantity_${index}">Quantity</label>
-                        <input type="number" class="form-control form-control-sm" name="quantity[]" id="quantity_${index}" placeholder="Quantity">
-                    </div>
-
-                    <!-- Tombol Hapus -->
-                    <div class="form-group col-md-1 d-flex align-items-center justify-content-center">
-                        <button type="button" class="btn btn-danger btn-sm remove-item">-</button>
-                    </div>
-                </div>
+        <div class="row form-item mb-2" id="product_${index}">
+            <div class="form-group col-md-4">
+                <label for="select2SingleProduct_${index}">Nama Product</label>
+                <select class="select2-single form-control product-select" name="product_id[]" id="select2SingleProduct_${index}">
+                    <option value="">Pilih Product</option>
+                    <?php foreach ($product as $pro): ?>
+                        <option value="<?= $pro['id']; ?>"><?= $pro['name']; ?> | <?= $pro['volume']; ?></option>
+                    <?php endforeach; ?>
+                </select>
             </div>
+            <div class="form-group col-md-2">
+                <label for="price_${index}">Harga</label>
+                <input type="text" class="form-control form-control-sm" name="price[]" id="price_${index}" placeholder="Price" readonly>
             </div>
+            <div class="form-group col-md-2">
+                <label for="stock_${index}">Stock</label>
+                <input type="number" class="form-control form-control-sm" id="stock_${index}" placeholder="Stock" readonly>
+            </div>
+            <div class="form-group col-md-2">
+                <label for="quantity_${index}">Quantity</label>
+                <input type="number" class="form-control form-control-sm" name="quantity[]" id="quantity_${index}" placeholder="Quantity">
+            </div>
+            <div class="form-group col-md-2 d-flex align-items-center">
+                <button type="button" class="btn btn-danger btn-sm remove-item">-</button>
+                <button type="button" class="btn btn-success btn-sm add-item mr-1">+</button>
 
-        `;
+            </div>
+        </div>`;
+        
         $('#productContainer').append(newItem);
         $(`#select2SingleProduct_${index}`).select2();
     });
