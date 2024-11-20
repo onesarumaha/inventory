@@ -11,7 +11,7 @@ class Omset extends BaseController
     public function index()
     {
         $query = new ModelsOmset();
-        $omset = $query->orderBy('id', 'DESC')->findAll();
+        $omset = $query->getProduct();
 
         $data = [
             'title' => 'Laporan Omset',

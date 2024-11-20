@@ -14,5 +14,12 @@ class TransaksiItem extends Model
     protected $protectFields    = true;
     protected $allowedFields    = ['transaksi_id', 'product_id', 'quantity', 'price', 'total', 'user_id', 'date'];
 
-
+    public function getItemsWithProduct($transaksiId)
+    {
+        return $this->select('transaksi_item.*, product.name AS nama_product')
+                    ->join('product', 'product.id = transaksi_item.product_id', 'left')
+                    ->where('transaksi_item.transaksi_id', $transaksiId)
+                    ->findAll();
+    }
+    
 }

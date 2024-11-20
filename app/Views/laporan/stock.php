@@ -25,8 +25,8 @@
                 foreach($stocks as $stock ) : ?>
                 <tr>
                     <td><?= $no++; ?></td>
-                    <td><?= $stock['date'] ?></td>
-                    <td><?= $stock['product_id'] ?></td>
+                    <td><?= date('d-m-Y', strtotime($stock['date'])) ?></td>
+                    <td><?= $stock['name'] ?></td>
                     <td><?= $stock['quantity'] ?></td>
                 </tr>
                 <?php endforeach; ?>

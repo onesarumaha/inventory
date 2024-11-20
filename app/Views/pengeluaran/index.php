@@ -38,20 +38,20 @@
                 <tr>
                     <td><?= $no++; ?></td>
                     <td><?= $pengeluaran['no_transaksi'] ?></td>
-                    <td><?= $pengeluaran['date'] ?></td>
-                    <td><?= $pengeluaran['customer_id'] ?></td>
-                    <td><?= $pengeluaran['total_price'] ?></td>
-                    <td style="display: flex; align-items: center;">
-                        <a href="<?= base_url('/pengeluaran/edit') ?>/<?= $pengeluaran['id'] ?>" class="btn btn-warning" style="margin-right: 5px;">
+                    <td><?= date('d-m-Y', strtotime($pengeluaran['date'])) ?></td>
+                    <td><?= $pengeluaran['name'] ?></td>
+                    <td>Rp. <?= number_format( $pengeluaran['total_price']) ?></td>
+                    <td style="display: flex; align-items: center; gap: 10px;">
+                        <a href="<?= base_url('/pengeluaran/edit') ?>/<?= $pengeluaran['id'] ?>" class="btn btn-warning btn-sm" style="margin-right: 5px;">
                             <i class="fas fa-pen"></i>
                         </a>
-                        <form id="delete-form" action="<?= base_url('/pengeluaran') ?>/<?= $pengeluaran['id'] ?>" method="post" style="margin: 0;">
-                            <input type="hidden" name="_method" value="DELETE">
-                            <?= csrf_field(); ?>
-                            <button type="button" class="btn btn-danger" onclick="confirmDelete()">
-                                <i class="fas fa-trash"></i>
-                            </button>
-                        </form>
+                        <a href="<?= base_url('/pengeluaran/view') ?>/<?= $pengeluaran['id'] ?>" class="btn btn-info btn-sm">
+                            <i class="fas fa-info-circle"></i>
+                        </a>
+                        <a href="<?= base_url('/pengeluaran/view') ?>/<?= $pengeluaran['id'] ?>" class="btn btn-danger btn-sm">
+                            <i class="fas fa-trash"></i>
+                        </a>
+                       
 
                     </td>
 

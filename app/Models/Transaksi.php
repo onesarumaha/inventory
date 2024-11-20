@@ -43,4 +43,29 @@ class Transaksi extends Model
     protected $afterFind      = [];
     protected $beforeDelete   = [];
     protected $afterDelete    = [];
+
+    public function getCustomer()
+    {
+        return $this->join('customer', 'customer.id = transaksi.customer_id', 'left')
+                    ->orderBy('transaksi.id', 'DESC')
+                    ->findAll();
+    }
+
+
+    public function getWithProduct($id = null)
+    {
+        $builder = $this->select('transaksi.*, customer.name AS nama_customer, product.name AS nama_product')
+                        ->join('customer', 'customer.id = transaksi.customer_id', 'left')
+                        ->join('transaksi_item', 'transaksi_item.transaksi_id = transaksi.id', 'left')
+                        ->join('product', 'product.id = transaksi_item.product_id', 'left')
+                        ->orderBy('transaksi.id', 'DESC');
+
+        if ($id !== null) {
+            $builder->where('transaksi.id', $id);
+            return $builder->first(); 
+        }
+
+        return $builder->findAll(); 
+    }
+
 }

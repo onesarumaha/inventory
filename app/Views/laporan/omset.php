@@ -25,8 +25,8 @@
                 foreach($omsets as $omset ) : ?>
                 <tr>
                     <td><?= $no++; ?></td>
-                    <td><?= $omset['date'] ?></td>
-                    <td><?= $omset['product_id'] ?></td>
+                    <td><?= date('d-m-Y', strtotime($omset['date'])) ?></td>
+                    <td><?= $omset['name'] ?></td>
                     <td><?= $omset['omset'] ?></td>
                 </tr>
                 <?php endforeach; ?>

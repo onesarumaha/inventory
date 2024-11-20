@@ -43,4 +43,13 @@ class Omset extends Model
     protected $afterFind      = [];
     protected $beforeDelete   = [];
     protected $afterDelete    = [];
+
+   public function getProduct()
+   {
+        return $this->join('product', 'product.id = laporan.product_id', 'left')
+            ->orderBy('laporan.id', 'DESC')
+            ->findAll();
+   }
+
+   
 }

@@ -59,6 +59,7 @@ $routes->get('/pengeluaran/create', [Transaksi::class, 'create']);
 $routes->get('/pengeluaran/details/(:num)', [Transaksi::class, 'getProductDetails/$1']);
 $routes->post('/pengeluaran/store', [Transaksi::class, 'store']);
 $routes->get('/pengeluaran/edit/(:any)', [Transaksi::class, 'edit/$1']);
+$routes->get('/pengeluaran/view/(:any)', [Transaksi::class, 'view/$1']);
 
 
 // route pemasukan

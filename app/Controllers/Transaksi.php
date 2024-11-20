@@ -13,8 +13,8 @@ class Transaksi extends BaseController
 {
     public function index()
     {
-        $query = new ModelsTransaksi();
-        $pengeluaran = $query->orderBy('id', 'DESC')->findAll();
+        $transaksiModel = new ModelsTransaksi();
+        $pengeluaran = $transaksiModel->getCustomer();
 
         $data = [
             'title' => 'Data Pengeluaran',
@@ -45,13 +45,14 @@ class Transaksi extends BaseController
     {
         $transaksiModel = new ModelsTransaksi();
         $transaksiItemModel = new ModelsTransaksiItem(); 
+        $productModel = new Product(); 
     
         try {
             $dataTransaksi = [
                 'customer_id' => $this->request->getPost('customer_id'),
                 'date' => date('Y-m-d'),
-                'no_transaksi' => 2,
-                'total_price' => 1212,
+                'no_transaksi' => 0,
+                'total_price' => 0,
                 'user_id' => $this->request->getPost('user_id'),
             ];
     
@@ -59,30 +60,46 @@ class Transaksi extends BaseController
                 throw new \Exception("Failed to insert main transaction.");
             }
             $transactionId = $transaksiModel->getInsertID();
-
+            
     
             if (!$transactionId) {
                 throw new \Exception("Failed to retrieve transaction ID after insertion.");
             }
+
+            $transaksiModel->update($transactionId, ['no_transaksi' => $transactionId]);
     
             $productIds = $this->request->getPost('product_id');
             $prices = $this->request->getPost('price');
             $quantities = $this->request->getPost('quantity');
     
             if (empty($productIds) || empty($prices) || empty($quantities)) {
-                throw new \Exception("Product details are missing.");
+                throw new \Exception("terjadi kesalahan.");
             }
-    
+            $totalPrice = 0;
             foreach ($productIds as $index => $productId) {
+                $product = $productModel->find($productId);
+    
+                if (!$product) {
+                    throw new \Exception("product tidak di temukan.");
+                }
+    
+                $stock = $product['stock'];
+                $quantity = intval($quantities[$index]);
+    
+                if ($quantity > $stock) {
+                    throw new \Exception("Quantity product tidak mencukupi).");
+                }
+    
                 $cleanedPrice = str_replace(['Rp.', ','], '', $prices[$index]);
                 $cleanedPrice = floatval($cleanedPrice);
-    
+                $itemTotal = $cleanedPrice * $quantity;
+
                 $dataTransaksiItem = [
                     'transaksi_id' => $transactionId,
                     'product_id' => $productId,
                     'price' => $cleanedPrice,
-                    'quantity' => $quantities[$index],
-                    'total' => $cleanedPrice * $quantities[$index],
+                    'quantity' => $quantity,
+                    'total' => $itemTotal,
                     'user_id' => $this->request->getPost('user_id'),
                     'date' => date('Y-m-d'),
                 ];
@@ -90,18 +107,58 @@ class Transaksi extends BaseController
                 if (!$transaksiItemModel->insert($dataTransaksiItem)) {
                     throw new \Exception("Failed to insert transaction item for product ID {$productId}.");
                 }
+
+                $totalPrice += $itemTotal;
+
+                $productModel->update($productId, ['stock' => $stock - $quantity]);
             }
+            $transaksiModel->update($transactionId, ['total_price' => $totalPrice]);
     
-            return redirect()->to('/pengeluaran')->with('message', 'Pengeluaran Berhasil .');
-    
+            return redirect()->to('/pengeluaran')->with('message', 'Pengeluaran Berhasil.');
         } catch (\Exception $e) {
             return redirect()->back()->with('error', 'Error: ' . $e->getMessage());
         }
     }
+
+    public function edit($id)
+    {
+        $transaksiModel = new ModelsTransaksi();
+        $transaksiItemModel = new ModelsTransaksiItem(); 
+        $productModel = new Product(); 
+        
+        $transaksi = $transaksiModel->find($id);
+        
+        
+        if (!$transaksi) {
+            return redirect()->to('/pengeluaran')->with('error', 'Transaksi tidak ditemukan.');
+        }
     
+        $transaksiItems = $transaksiItemModel->where('transaksi_id', $id)->findAll();
+
+        $customerModel = new Customer();
+        $customers = $customerModel->findAll();
+    
+        $products = $productModel->findAll();
+    
+        $data = [
+            'title' => 'Edit Pengeluaran',
+            'transaksi' => $transaksi,
+            'transaksiItems' => $transaksiItems,
+            'customer' => $customers,
+            'product' => $products
+        ];
+    
+        return view('pengeluaran/form', $data);
+    }
     
     
 
+    public function update($id)
+    {
+        
+    }
+    
+    
     public function getProductDetails($productId): ResponseInterface
     {
         $productModel = new Product();
@@ -120,6 +177,31 @@ class Transaksi extends BaseController
             'message' => 'Product not found'
         ]);
     }
+
+    public function view($id)
+    {
+        $transaksiModel = new \App\Models\Transaksi();
+        $transaksiItemModel = new \App\Models\TransaksiItem();
+    
+        $transaksi = $transaksiModel->getWithProduct($id);
+    
+        if (!$transaksi) {
+            throw new \CodeIgniter\Exceptions\PageNotFoundException("Transaksi dengan ID $id tidak ditemukan.");
+        }
+    
+        $transaksiItems = $transaksiItemModel->getItemsWithProduct($id);
+    
+        $data = [
+            'title' => 'Detail Transaksi',
+            'transaksi' => $transaksi,
+            'transaksiItems' => $transaksiItems,
+        ];
+    
+        return view('pengeluaran/view', $data);
+    }
+    
+    
+    
 
 
 

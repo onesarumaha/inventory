@@ -11,7 +11,7 @@ class Stock extends BaseController
     public function index()
     {
         $query = new ModelsStock();
-        $stock = $query->orderBy('id', 'DESC')->findAll();
+        $stock = $query->getProduct();
 
         $data = [
             'title' => 'Laporan Stock Barang',
