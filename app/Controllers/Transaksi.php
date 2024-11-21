@@ -4,6 +4,7 @@ namespace App\Controllers;
 
 use App\Controllers\BaseController;
 use App\Models\Customer;
+use App\Models\Laporan;
 use App\Models\Product;
 use App\Models\Transaksi as ModelsTransaksi;
 use App\Models\TransaksiItem as  ModelsTransaksiItem;
@@ -44,8 +45,9 @@ class Transaksi extends BaseController
     public function store()
     {
         $transaksiModel = new ModelsTransaksi();
-        $transaksiItemModel = new ModelsTransaksiItem(); 
-        $productModel = new Product(); 
+        $transaksiItemModel = new ModelsTransaksiItem();
+        $productModel = new Product();
+        $laporanModel = new Laporan(); // Tambahkan model Laporan
     
         try {
             $dataTransaksi = [
@@ -60,12 +62,11 @@ class Transaksi extends BaseController
                 throw new \Exception("Failed to insert main transaction.");
             }
             $transactionId = $transaksiModel->getInsertID();
-            
     
             if (!$transactionId) {
                 throw new \Exception("Failed to retrieve transaction ID after insertion.");
             }
-
+    
             $transaksiModel->update($transactionId, ['no_transaksi' => $transactionId]);
     
             $productIds = $this->request->getPost('product_id');
@@ -75,25 +76,26 @@ class Transaksi extends BaseController
             if (empty($productIds) || empty($prices) || empty($quantities)) {
                 throw new \Exception("terjadi kesalahan.");
             }
+    
             $totalPrice = 0;
             foreach ($productIds as $index => $productId) {
                 $product = $productModel->find($productId);
     
                 if (!$product) {
-                    throw new \Exception("product tidak di temukan.");
+                    throw new \Exception("Product tidak ditemukan.");
                 }
     
                 $stock = $product['stock'];
                 $quantity = intval($quantities[$index]);
     
                 if ($quantity > $stock) {
-                    throw new \Exception("Quantity product tidak mencukupi).");
+                    throw new \Exception("Quantity product tidak mencukupi.");
                 }
     
                 $cleanedPrice = str_replace(['Rp.', ','], '', $prices[$index]);
                 $cleanedPrice = floatval($cleanedPrice);
                 $itemTotal = $cleanedPrice * $quantity;
-
+    
                 $dataTransaksiItem = [
                     'transaksi_id' => $transactionId,
                     'product_id' => $productId,
@@ -107,11 +109,28 @@ class Transaksi extends BaseController
                 if (!$transaksiItemModel->insert($dataTransaksiItem)) {
                     throw new \Exception("Failed to insert transaction item for product ID {$productId}.");
                 }
-
+    
                 $totalPrice += $itemTotal;
-
+    
                 $productModel->update($productId, ['stock' => $stock - $quantity]);
+    
+                $dataLaporan = [
+                    'parant_id' => $transactionId, 
+                    'date' => date('Y-m-d'),
+                    'product_id' => $productId,
+                    'quantity' => $quantity,
+                    'omset' => $itemTotal, 
+                    'user_id' => $this->request->getPost('user_id'),
+                    'type' => 'out',
+                    'from' => 'pengeluaran',
+
+                ];
+    
+                if (!$laporanModel->insert($dataLaporan)) {
+                    throw new \Exception("Failed to insert laporan for product ID {$productId}.");
+                }
             }
+    
             $transaksiModel->update($transactionId, ['total_price' => $totalPrice]);
     
             return redirect()->to('/pengeluaran')->with('message', 'Pengeluaran Berhasil.');
@@ -119,6 +138,7 @@ class Transaksi extends BaseController
             return redirect()->back()->with('error', 'Error: ' . $e->getMessage());
         }
     }
+    
 
     public function edit($id)
     {

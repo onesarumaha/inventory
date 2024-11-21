@@ -24,7 +24,9 @@
         <div id="collapseBootstrap" class="collapse <?= is_active('/users') || is_active('/customer') ||  is_active('/product') || is_active('/supplier') ? 'show' : '' ?>" aria-labelledby="headingBootstrap" data-parent="#accordionSidebar">
           <div class="bg-white py-2 collapse-inner rounded">
             <h6 class="collapse-header">Master</h6>
-            <a class="collapse-item <?= is_active('/users') ?>" href="<?= base_url('/users') ?>">User</a>
+              <?php if (session()->get('role') !== 'petugas'): ?>
+                <a class="collapse-item <?= is_active('/users') ?>" href="<?= base_url('/users') ?>">User</a>
+            <?php endif; ?>
             <a class="collapse-item <?= is_active('/product') ?>" href="<?= base_url('/product') ?>">Product</a>
             <a class="collapse-item <?= is_active('/customer') ?>" href="<?= base_url('/customer') ?>">Customer</a>
             <a class="collapse-item <?= is_active('/supplier') ?>" href="<?= base_url('/supplier') ?>">Supplier</a>

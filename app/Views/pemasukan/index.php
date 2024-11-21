@@ -23,18 +23,7 @@
                     <th>Action</th>
                 </tr>
                 </thead>
-                <tfoot>
-                <tr>
-                    <th>No</th>
-                    <th>Product</th>
-                    <th>Harga</th>
-                    <th>Quantity</th>
-                    <th>Supplier</th>
-                    <th>Status</th>
-                    <th>Upload</th>
-                    <th>Action</th>
-                </tr>
-                </tfoot>
+             
                 <tbody>
                 <?php 
                 $no = 1;
@@ -50,9 +39,9 @@
                         if ($pemasukan['status'] == 0) {
                             echo '<span class="badge bg-warning text-light">Menunggu di approve admin</span>';
                         } elseif ($pemasukan['status'] == 1) {
-                            echo '<span class="badge bg-primary text-light">Menunggu di approve owner</span>';
+                            echo '<span class="badge bg-primary text-light">Approve Admin</span>';
                         } elseif ($pemasukan['status'] == 2) {
-                            echo '<span class="badge bg-success text-light">Selesai</span>';
+                            echo '<span class="badge bg-success text-light">Approve</span>';
                         } else {
                             echo 'Status tidak diketahui';
                         }

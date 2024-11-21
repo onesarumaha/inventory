@@ -17,6 +17,7 @@
                             <th>Date</th>
                             <th>Product</th>
                             <th>Quantity</th>
+                            <th>Type</th>
                         </tr>
                     </thead>
                 <tbody>
@@ -28,6 +29,7 @@
                     <td><?= date('d-m-Y', strtotime($stock['date'])) ?></td>
                     <td><?= $stock['name'] ?></td>
                     <td><?= $stock['quantity'] ?></td>
+                    <td><?= $stock['type'] ?></td>
                 </tr>
                 <?php endforeach; ?>
                 

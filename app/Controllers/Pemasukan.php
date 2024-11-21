@@ -118,6 +118,7 @@ class Pemasukan extends BaseController
                 'date' => date('Y-m-d'),
                 'type' => 'in', 
                 'user_id' => $this->request->getPost('user_id'),
+                'omset' => $this->request->getPost('price') * $this->request->getPost('quantity'),
                 'from' => 'pengadaan-barang',
             ];
 

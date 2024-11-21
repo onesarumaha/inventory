@@ -21,16 +21,27 @@
                         </div>
                     <?php endif; ?>
                 </div>
+
                 <div class="form-group">
-                    <label for="exampleInputEmail1">Volume</label>
-                    <input type="text" class="form-control" name="volume" id="exampleInputEmail1" aria-describedby="emailHelp"
-                    placeholder="Volume" value="<?= old('volume', isset($product) ? $product['volume'] : ''); ?>">
+                    <label for="exampleFormControlSelect1">Volume</label>
+                    <select class="form-control" id="exampleFormControlSelect1" name="volume">
+                        <option value="">Pilih Volume</option>
+                        <option value="0,12 Liter" <?= (old('volume', isset($product) ? $product['volume'] : '') == '0,12 Liter') ? 'selected' : ''; ?>>0,12 Liter</option>
+                        <option value="0,8 Liter" <?= (old('volume', isset($product) ? $product['volume'] : '') == '0,8 Liter') ? 'selected' : ''; ?>>0,8 Liter</option>
+                        <option value="1 Liter" <?= (old('volume', isset($product) ? $product['volume'] : '') == '1 Liter') ? 'selected' : ''; ?>>1 Liter</option>
+                        <option value="3,5 Liter" <?= (old('volume', isset($product) ? $product['volume'] : '') == '3,5 Liter') ? 'selected' : ''; ?>>3,5 Liter</option>
+                        <option value="4 Liter" <?= (old('volume', isset($product) ? $product['volume'] : '') == '4 Liter') ? 'selected' : ''; ?>>4 Liter</option>
+                        <option value="5 Liter" <?= (old('volume', isset($product) ? $product['volume'] : '') == '5 Liter') ? 'selected' : ''; ?>>5 Liter</option>
+                        <option value="10 Liter" <?= (old('volume', isset($product) ? $product['volume'] : '') == '10 Liter') ? 'selected' : ''; ?>>10 Liter</option>
+                    </select>
                     <?php if (session()->getFlashdata('errors')['volume'] ?? null): ?>
                         <div style="color: red;">
                             <?= session()->getFlashdata('errors')['volume']; ?>
                         </div>
                     <?php endif; ?>
                 </div>
+
+                        
                 <div class="form-group">
                     <label for="exampleInputHP1">Price</label>
                     <input type="number" class="form-control" name="price" id="exampleInputHP1" aria-describedby="emailHelp"

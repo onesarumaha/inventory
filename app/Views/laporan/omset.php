@@ -16,6 +16,7 @@
                             <th>No</th>
                             <th>Date</th>
                             <th>Product</th>
+                            <th>Quantity</th>
                             <th>Omset</th>
                         </tr>
                     </thead>
@@ -25,9 +26,10 @@
                 foreach($omsets as $omset ) : ?>
                 <tr>
                     <td><?= $no++; ?></td>
-                    <td><?= date('d-m-Y', strtotime($omset['date'])) ?></td>
+                    <td><?= $omset['date']?></td>
                     <td><?= $omset['name'] ?></td>
-                    <td><?= $omset['omset'] ?></td>
+                    <td><?= $omset['quantity'] ?></td>
+                    <td>Rp. <?= number_format($omset['omset']) ?></td>
                 </tr>
                 <?php endforeach; ?>
                 
