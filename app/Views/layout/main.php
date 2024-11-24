@@ -480,6 +480,6 @@
       }
 
 </script>
-</script>
+
 
 </html>

@@ -38,7 +38,7 @@
                 <tr>
                     <td><?= $no++; ?></td>
                     <td><?= $pengeluaran['no_transaksi'] ?></td>
-                    <td><?= date('d-m-Y', strtotime($pengeluaran['date'])) ?></td>
+                    <td><?= date('d-m-Y H:s:i', strtotime($pengeluaran['date'])) ?></td>
                     <td><?= $pengeluaran['name'] ?></td>
                     <td>Rp. <?= number_format( $pengeluaran['total_price']) ?></td>
                     <td style="display: flex; align-items: center; gap: 10px;">

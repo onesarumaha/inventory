@@ -75,7 +75,7 @@ class Pemasukan extends BaseController
             'product_id' => 'required',
             'price' => 'required|numeric',
             'quantity' => 'required|numeric',
-            'upload' => 'uploaded[upload]|max_size[upload,2048]|ext_in[upload,pdf,doc,docx,jpg,jpeg,png]'
+            // 'upload' => 'uploaded[upload]|max_size[upload,2048]|ext_in[upload,pdf,doc,docx,jpg,jpeg,png]'
         ]);
     
         if (!$validation->withRequest($this->request)->run()) {
@@ -99,8 +99,9 @@ class Pemasukan extends BaseController
         $data = [
             'product_id' => $this->request->getPost('product_id'),
             'price' => $this->request->getPost('price'),
+            'status' => '0',
             'quantity' => $this->request->getPost('quantity'),
-            'date' => $this->request->getPost('date'),
+            'date' => date('Y-m-d H:s:i'),
             'supplier_id' => $this->request->getPost('supplier_id'),
             'customer_id' => $this->request->getPost('customer_id'),
             'user_id' => $this->request->getPost('user_id'),
@@ -115,7 +116,7 @@ class Pemasukan extends BaseController
                 'product_id' => $this->request->getPost('product_id'),
                 'parant_id' => $insertedId, 
                 'quantity' => $this->request->getPost('quantity'),
-                'date' => date('Y-m-d'),
+                'date' => date('Y-m-d H:s:i'),
                 'type' => 'in', 
                 'user_id' => $this->request->getPost('user_id'),
                 'omset' => $this->request->getPost('price') * $this->request->getPost('quantity'),
@@ -285,7 +286,25 @@ class Pemasukan extends BaseController
         $existingData = $pemasukanModel->find($id);
     
         if ($existingData) {
-            $dataToUpdate = ['status' => 1]; 
+            $dataToUpdate = ['status' => '1']; 
+    
+            if ($pemasukanModel->update($id, $dataToUpdate)) {
+                return $this->response->setJSON(['success' => true]);
+            } else {
+                return $this->response->setJSON(['success' => false]);
+            }
+        } else {
+            return $this->response->setJSON(['success' => false]);
+        }
+    }
+
+    public function approveOwner($id)
+    {
+        $pemasukanModel = new ModelsPemasukan();
+        $existingData = $pemasukanModel->find($id);
+    
+        if ($existingData) {
+            $dataToUpdate = ['status' => '2']; 
     
             if ($pemasukanModel->update($id, $dataToUpdate)) {
                 return $this->response->setJSON(['success' => true]);
@@ -297,72 +316,76 @@ class Pemasukan extends BaseController
         }
     }
     
-    
-    public function approveOwner($id)
+
+    public function saveQuantityReal()
     {
-        $pemasukanModel = new ModelsPemasukan();
-        $productModel = new Product();
-    
-        $existingData = $pemasukanModel->find($id);
-    
-        if (!$existingData) {
+        $id = $this->request->getPost('id');
+        $quantity = $this->request->getPost('quantity_real');
+
+        if (empty($id) || empty($quantity)) {
             return $this->response->setJSON([
-                'success' => false,
-                'message' => 'Pemasukan tidak ditemukan.'
+                'status' => 'error',
+                'message' => 'ID atau Quantity tidak boleh kosong.'
             ]);
         }
-    
-        $dataToUpdate = [
-            'status' => 2, 
-        ];
-    
+
+        $pemasukanModel = new ModelsPemasukan();
+        $productModel = new Product(); 
+        $laporanModel = new Laporan(); 
+
         $db = \Config\Database::connect();
         $db->transBegin();
-    
+
         try {
-            if (!$pemasukanModel->update($id, $dataToUpdate)) {
-                throw new \Exception('Gagal mengupdate status pemasukan.');
+            $update = $pemasukanModel->update($id, ['quantity_real' => $quantity, 'status' => '3']);
+
+            if (!$update) {
+                throw new \Exception('Gagal menyimpan Quantity Real.');
             }
-    
-            $productId = $existingData['product_id'];
-            $quantityToAdd = $existingData['quantity']; 
-    
+
+            $pemasukan = $pemasukanModel->find($id);
+            $productId = $pemasukan['product_id']; 
+
             $product = $productModel->find($productId);
             if (!$product) {
                 throw new \Exception('Produk tidak ditemukan.');
             }
-    
-            $newStock = $product['stock'] + $quantityToAdd;
+
+            $newStock = $product['stock'] + $quantity;
             $productUpdateData = [
                 'stock' => $newStock,
             ];
-    
-            if (!$productModel->update($productId, $productUpdateData)) {
-                throw new \Exception('Gagal mengupdate stok produk.');
+
+            $productUpdate = $productModel->update($productId, $productUpdateData);
+            if (!$productUpdate) {
+                throw new \Exception('Gagal memperbarui stok produk.');
             }
-    
+
+            $laporanUpdate = $db->table('laporan')
+                ->where('parant_id', $id)
+                ->update(['quantity' => $quantity]);
+
+            if (!$laporanUpdate) {
+                throw new \Exception('Gagal memperbarui quantity di tabel laporan.');
+            }
+
             $db->transCommit();
+
             return $this->response->setJSON([
-                'success' => true,
-                'message' => 'Berhasil approve data pemasukan dan stock berhasil diperbarui.'
+                'status' => 'success',
+                'message' => 'Cek quantity real berhasil.'
             ]);
-    
         } catch (\Exception $e) {
             $db->transRollback();
+
             return $this->response->setJSON([
-                'success' => false,
-                'message' => $e->getMessage()
+                'status' => 'error',
+                'message' => $e->getMessage(),
             ]);
         }
     }
 
-    
-    
 
-    
-    
-    
 
-    
 
 }

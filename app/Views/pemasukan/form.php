@@ -68,7 +68,7 @@
                                 <div class="input-group-prepend">
                                 <span class="input-group-text"><i class="fas fa-calendar"></i></span>
                                 </div>
-                                <input type="text" name="date" class="form-control form-control-sm" id="simpleDataInput">
+                                <input type="text" name="date" class="form-control form-control-sm" id="simpleDataInput" disabled>
                             </div>
                         </div>
 
