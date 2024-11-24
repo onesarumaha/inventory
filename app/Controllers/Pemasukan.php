@@ -227,6 +227,31 @@ class Pemasukan extends BaseController
             return redirect()->back()->withInput()->with('errors', ['error' => 'Failed to update data in pemasukan.']);
         }
     }
+
+    public function view($id)
+    {
+        $pemasukanModel = new ModelsPemasukan();
+        $pemasukan = $pemasukanModel->find($id);
+
+        if (!$pemasukan) {
+            throw new \CodeIgniter\Exceptions\PageNotFoundException('product not found');
+        }
+
+        $supplierModel = new \App\Models\Supplier();
+        $supplier = $supplierModel->find($pemasukan['supplier_id']);
+        $productModel = new \App\Models\Product();
+        $product = $productModel->find($pemasukan['product_id']);
+
+
+        $data = [
+            'title' => 'Detail Pemasukan',
+            'pemasukan' => $pemasukan,
+            'supplier' => $supplier,
+            'product' => $product
+        ];
+
+        return view('pemasukan/view', $data); 
+    }
     
 
 

@@ -20,7 +20,6 @@
                     <th>Quantity</th>
                     <th>Supplier</th>
                     <th>Status</th>
-                    <th>Upload</th>
                     <th>Action</th>
                 </tr>
                 </thead>
@@ -51,11 +50,6 @@
                         }
                         ?>
                     </td>
-                    <td>
-                        <a href="<?= site_url('pemasukan/download/' . $pemasukan['upload']) ?>">
-                            Download
-                        </a>
-                    </td>
 
                     <td style="display: flex; align-items: center; gap: 10px;">
                         <?php if (session()->get('role') === 'petugas'): ?>
@@ -64,6 +58,9 @@
                             </a>
                             <a href="javascript:void(0);" class="btn btn-danger btn-sm" onclick="confirmDelete(<?= $pemasukan['id'] ?>)">
                                 <i class="fas fa-trash"></i>
+                            </a>
+                            <a href="<?= base_url('/pemasukan/view/') ?><?= $pemasukan['id'] ?>" class="btn btn-success btn-sm">
+                                <i class="fas fa-eye"></i>
                             </a>
                             <?php if($pemasukan['status'] == 2) : ?>
                             <button type="button" class="btn btn-primary btn-sm" data-toggle="modal"  data-target="#exampleModal" data-id="<?= $pemasukan['id'] ?>"> <i class="fas fa-list"></i></button>

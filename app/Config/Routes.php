@@ -72,7 +72,7 @@ $routes->get('/pemasukan/download/(:any)', [Pemasukan::class, 'download/$1']);
 $routes->post('/pemasukan/approve-admin/(:num)', [Pemasukan::class, 'approveAdmin/$1']); 
 $routes->post('/pemasukan/approve-owner/(:num)', [Pemasukan::class, 'approveOwner/$1']); 
 $routes->post('/pemasukan/save-quantity', [Pemasukan::class, 'saveQuantityReal']); 
-
+$routes->get('/pemasukan/view/(:any)', [Pemasukan::class, 'view/$1']);
 $routes->delete('/pemasukan/(:num)', [Pemasukan::class, 'delete/$1']);
 
 
