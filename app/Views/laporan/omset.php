@@ -5,14 +5,29 @@
 <div class="row mb-12">
     <div class="col-lg-12">
         <div class="card mb-4">
-            <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                <h6 class="m-0 font-weight-bold text-primary"><?= $title ?></h6>
-                <h6 class="m-0 font-weight-bold text-primary text-left">
-                    Total Omset : Rp. <span id="totalOmset"><?= number_format($totalOmset) ?></span>
+        <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+            <h6 class="m-0 font-weight-bold text-primary"><?= $title ?></h6>
+            <div class="d-flex align-items-center">
+                <h6 class="m-0 font-weight-bold text-primary mr-3">
+                    Total Omset: Rp. <span id="totalOmset"><?= number_format($totalOmset) ?></span>
                 </h6>
-                <a href="<?= base_url('/supplier/create') ?>" type="button" class="btn btn-primary mb-1" data-toggle="modal" data-target="#exampleModalLaporan"
-                id="#myBtn">Advance Filter</a>
+                <div class="dropdown mr-3">
+                    <a class="btn btn-primary dropdown-toggle" href="#" role="button" id="dropdownMenuLink"
+                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Export
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                        <a class="dropdown-item" href="#" id="exportPdf">Export PDF</a>
+                        <a class="dropdown-item" href="#" id="exportExcel">Export Excel</a>
+                    </div>
+                </div>
+                <a href="<?= base_url('/supplier/create') ?>" type="button" class="btn btn-primary"
+                data-toggle="modal" data-target="#exampleModalLaporan" id="#myBtn">
+                Advance Filter
+                </a>
             </div>
+        </div>
+
             <div class="table-responsive">
                 <table class="table align-items-center table-flush">
                     <thead class="thead-light">
@@ -134,6 +149,41 @@ document.getElementById('filterButton').addEventListener('click', function () {
     })
     .catch(error => console.error('Error:', error));
 });
+
+
+document.getElementById('exportExcel').addEventListener('click', function () {
+    const startDate = document.getElementById('exampleFormControlInputStartDate').value;
+    const endDate = document.getElementById('exampleFormControlInputEndDate').value;
+    const petugasId = document.getElementById('exampleFormControlSelect1Petugas').value;
+    const type = document.getElementById('exampleFormControlSelectType').value;
+
+    const url = new URL('<?= base_url('/export-data-omset') ?>');
+    url.searchParams.append('startDate', startDate);
+    url.searchParams.append('endDate', endDate);
+    url.searchParams.append('petugasId', petugasId);
+    url.searchParams.append('type', type);
+    url.searchParams.append('action', 'excel'); 
+
+    window.location.href = url;
+});
+
+document.getElementById('exportPdf').addEventListener('click', function () {
+    const startDate = document.getElementById('exampleFormControlInputStartDate').value;
+    const endDate = document.getElementById('exampleFormControlInputEndDate').value;
+    const petugasId = document.getElementById('exampleFormControlSelect1Petugas').value;
+    const type = document.getElementById('exampleFormControlSelectType').value;
+
+    const url = new URL('<?= base_url('/export-data-omset') ?>');
+    url.searchParams.append('startDate', startDate);
+    url.searchParams.append('endDate', endDate);
+    url.searchParams.append('petugasId', petugasId);
+    url.searchParams.append('type', type);
+    url.searchParams.append('action', 'pdf'); 
+
+    window.location.href = url;
+});
+
+
 </script>
 
 

@@ -81,6 +81,7 @@ $routes->get('/stock', [Stock::class, 'index']);
 $routes->get('/filter-stock', [Stock::class, 'filter']);
 $routes->get('/omset', [Omset::class, 'index']);
 $routes->get('/filter-omset', [Omset::class, 'filter']);
+$routes->get('/export-data-omset', [Omset::class, 'exportDataOmset']);
 
 // route profile
 $routes->get('/profile', [Profile::class, 'index']);
