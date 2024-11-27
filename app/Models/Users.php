@@ -43,4 +43,9 @@ class Users extends Model
     protected $afterFind      = [];
     protected $beforeDelete   = [];
     protected $afterDelete    = [];
+
+    public function getPetugas()
+    {
+        return $this->where('role', 'petugas')->findAll();
+    }
 }

@@ -50,4 +50,12 @@ class Stock extends Model
              ->orderBy('laporan.id', 'DESC')
              ->findAll();
     }
+
+    public function getProducts()
+    {
+        return $this->select('laporan.*, product.name as product_name')
+                    ->join('product', 'product.id = laporan.product_id')
+                    ->findAll();
+    }
+    
 }

@@ -52,7 +52,7 @@ class Transaksi extends BaseController
         try {
             $dataTransaksi = [
                 'customer_id' => $this->request->getPost('customer_id'),
-                'date' => date('Y-m-d'),
+                'date' => date('Y-m-d H:s:i'),
                 'no_transaksi' => 0,
                 'total_price' => 0,
                 'user_id' => $this->request->getPost('user_id'),
@@ -95,7 +95,9 @@ class Transaksi extends BaseController
                 $cleanedPrice = str_replace(['Rp.', ','], '', $prices[$index]);
                 $cleanedPrice = floatval($cleanedPrice);
                 $itemTotal = $cleanedPrice * $quantity;
-    
+                
+                date_default_timezone_set('Asia/Jakarta');
+
                 $dataTransaksiItem = [
                     'transaksi_id' => $transactionId,
                     'product_id' => $productId,
@@ -103,7 +105,7 @@ class Transaksi extends BaseController
                     'quantity' => $quantity,
                     'total' => $itemTotal,
                     'user_id' => $this->request->getPost('user_id'),
-                    'date' => date('Y-m-d'),
+                    'date' => date('Y-m-d H:s:i'),
                 ];
     
                 if (!$transaksiItemModel->insert($dataTransaksiItem)) {
@@ -116,7 +118,7 @@ class Transaksi extends BaseController
     
                 $dataLaporan = [
                     'parant_id' => $transactionId, 
-                    'date' => date('Y-m-d'),
+                    'date' => date('Y-m-d H:s:i'),
                     'product_id' => $productId,
                     'quantity' => $quantity,
                     'omset' => $itemTotal, 

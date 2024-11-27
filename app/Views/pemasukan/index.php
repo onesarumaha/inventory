@@ -106,8 +106,12 @@
                 <div class="modal-body">
                     <input type="hidden" id="modalId" name="id">
                     <div class="form-group">
-                        <label for="modalQuantity">Quantity</label>
-                        <input type="number" class="form-control" id="modalQuantity"  name="quantity_real" placeholder="Masukkan Quantity" required>
+                        <label for="modalQuantityBiasa">Quantity Real</label>
+                        <input type="number" class="form-control" id="modalQuantityBiasa"  readonly>
+                    </div>
+                    <div class="form-group">
+                        <label for="modalQuantity">Quantity Real</label>
+                        <input type="number" class="form-control" id="modalQuantity"  name="quantity_real" placeholder="Masukkan Quantity Real" required>
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -126,48 +130,87 @@
         var id = button.data('id'); 
         console.log(id);
         $('#modalId').val(id); 
+
+
+     
+
+    // Ambil quantity dari baris yang diklik
+    var row = button.closest('tr'); 
+    var quantity = row.find('td:nth-child(5)').text(); 
+
+    $('#modalId').val(id); 
+    $('#modalQuantityBiasa').val(quantity.trim()); 
+
+
     });
 
     $('#modalForm').on('submit', function (e) {
-        e.preventDefault(); 
+    e.preventDefault(); 
 
-        var formData = $(this).serialize(); 
+    var currentQuantity = parseInt($('#modalQuantityBiasa').val(), 10); 
+    var newQuantity = parseInt($('#modalQuantity').val(), 10); 
 
-        $.ajax({
-            url: '<?= base_url('/pemasukan/save-quantity') ?>', 
-            method: 'POST',
-            data: formData,
-            success: function (response) {
-                if (response.status === 'success') {
-                    Swal.fire({
-                        title: 'Berhasil!',
-                        text: response.message,
-                        icon: 'success',
-                        confirmButtonText: 'OK'
-                    }).then(() => {
-                        $('#exampleModal').modal('hide'); 
-                        location.reload(); 
-                    });
-                } else {
-                    Swal.fire({
-                        title: 'Gagal!',
-                        text: response.message,
-                        icon: 'error',
-                        confirmButtonText: 'OK'
-                    });
-                }
-            },
-            error: function () {
+    if (newQuantity > currentQuantity) {
+        Swal.fire({
+            title: 'Error!',
+            text: 'Quantity yang anda masukkan terlalu besar.',
+            icon: 'warning',
+            confirmButtonText: 'OK'
+        });
+        return; 
+    }
+
+    if (newQuantity <= 0) {
+        Swal.fire({
+            title: 'Error!',
+            text: 'Quantity harus lebih dari 0.',
+            icon: 'warning',
+            confirmButtonText: 'OK'
+        });
+        return; 
+    }
+
+    var formData = $(this).serialize(); 
+
+    $.ajax({
+        url: '<?= base_url('/pemasukan/save-quantity') ?>', 
+        method: 'POST',
+        data: formData,
+        success: function (response) {
+            if (response.status === 'success') {
                 Swal.fire({
-                    title: 'Error!',
-                    text: 'Terjadi kesalahan saat menyimpan data.',
+                    title: 'Berhasil!',
+                    text: response.message,
+                    icon: 'success',
+                    confirmButtonText: 'OK'
+                }).then(() => {
+                    $('#exampleModal').modal('hide'); 
+                    location.reload(); 
+                });
+            } else {
+                Swal.fire({
+                    title: 'Gagal!',
+                    text: response.message,
                     icon: 'error',
                     confirmButtonText: 'OK'
                 });
             }
-        });
+        },
+        error: function () {
+            Swal.fire({
+                title: 'Error!',
+                text: 'Terjadi kesalahan saat menyimpan data.',
+                icon: 'error',
+                confirmButtonText: 'OK'
+            });
+        }
     });
 });
+
+});
+
+
+
 
 </script>
 

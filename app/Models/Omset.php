@@ -51,5 +51,12 @@ class Omset extends Model
             ->findAll();
    }
 
+   public function getProducts()
+   {
+       return $this->select('laporan.*, product.name as product_name')
+                   ->join('product', 'product.id = laporan.product_id')
+                   ->findAll();
+   }
+
    
 }

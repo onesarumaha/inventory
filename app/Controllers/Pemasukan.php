@@ -95,6 +95,7 @@ class Pemasukan extends BaseController
         } else {
             log_message('error', 'Invalid file upload: ' . $file->getErrorString());
         }
+        date_default_timezone_set('Asia/Jakarta');
     
         $data = [
             'product_id' => $this->request->getPost('product_id'),
