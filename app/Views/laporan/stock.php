@@ -21,22 +21,26 @@
                             <th>Type</th>
                         </tr>
                     </thead>
-                <tbody>
-                <?php 
-                $no = 1;
-                foreach($stocks as $stock ) : ?>
-                <tr>
-                    <td><?= $no++; ?></td>
-                    <td><?= date('d-m-Y h:s:i', strtotime($stock['date'])) ?></td>
-                    <td><?= $stock['name'] ?></td>
-                    <td><?= $stock['quantity'] ?></td>
-                    <td><?= $stock['type'] ?></td>
-                </tr>
-                <?php endforeach; ?>
-                
-                </tbody>
-            </table>
+                    <tbody>
+                        <?php if (empty($stocks)) : ?>
+                            <tr>
+                                <td colspan="5" class="text-center">No Data</td>
+                            </tr>
+                        <?php else: ?>
+                            <?php $no = 1; foreach ($stocks as $stock) : ?>
+                                <tr>
+                                    <td><?= $no++; ?></td>
+                                    <td><?= date('d-m-Y H:i:s', strtotime($stock['date'])) ?></td>
+                                    <td><?= $stock['name'] ?? '-' ?></td>
+                                    <td><?= $stock['quantity'] ?></td>
+                                    <td><?= $stock['type'] ?></td>
+                                </tr>
+                            <?php endforeach; ?>
+                        <?php endif; ?>
+                    </tbody>
+                </table>
             </div>
+
         </div>
     </div>
 </div>

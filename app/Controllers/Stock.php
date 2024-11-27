@@ -11,18 +11,31 @@ class Stock extends BaseController
 {
     public function index()
     {
+        $user = user(); 
+        $role = $user->role; 
+    
+        if (!is_array($role)) {
+            $role = [$role];
+        }
+    
         $query = new ModelsStock();
-        $stock = $query->getProduct();
-
+    
+        if (in_array('petugas', $role)) {
+            $stock = $query->getProductByPetugas($user->id);
+        } else {
+            $stock = $query->getProduct();
+    
+        }
+    
         $userModel = new Users();
         $petugas = $userModel->getPetugas();
-
-
+    
         $data = [
             'title' => 'Laporan Stock Barang',
             'stocks' => $stock,
             'petugas' => $petugas,
         ];
+    
         return view('laporan/stock', $data);    
     }
 

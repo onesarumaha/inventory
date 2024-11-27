@@ -14,22 +14,37 @@ class Omset extends BaseController
 {
     public function index()
     {
+        $user = user();
+        $role = $user->role;
+        $userId = $user->id; 
+    
+        if (!is_array($role)) {
+            $role = [$role];
+        }
+    
         $query = new ModelsOmset();
-        $omset = $query->getProduct();
+    
+        if (in_array('petugas', $role)) {
+            $omset = $query->getProductByPetugas($userId);
+        } else {
+            $omset = $query->getProduct();
+        }
+    
         $totalOmset = array_sum(array_column($omset, 'omset'));
-
-
+    
         $userModel = new Users();
         $petugas = $userModel->getPetugas();
-
+    
         $data = [
             'title' => 'Laporan Omset',
             'omsets' => $omset,
             'petugas' => $petugas,
             'totalOmset' => $totalOmset,
         ];
-        return view('laporan/omset', $data);   
+    
+        return view('laporan/omset', $data);
     }
+    
 
     public function filter()
     {

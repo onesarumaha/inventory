@@ -28,33 +28,37 @@
             </div>
         </div>
 
-            <div class="table-responsive">
-                <table class="table align-items-center table-flush">
-                    <thead class="thead-light">
-                        <tr>
-                            <th>No</th>
-                            <th>Date</th>
-                            <th>Product</th>
-                            <th>Quantity</th>
-                            <th>Omset</th>
-                        </tr>
-                    </thead>
+        <div class="table-responsive">
+            <table class="table align-items-center table-flush">
+                <thead class="thead-light">
+                    <tr>
+                        <th>No</th>
+                        <th>Date</th>
+                        <th>Product</th>
+                        <th>Quantity</th>
+                        <th>Omset</th>
+                    </tr>
+                </thead>
                 <tbody>
-                <?php 
-                $no = 1;
-                foreach($omsets as $omset ) : ?>
-                <tr>
-                    <td><?= $no++; ?></td>
-                    <td><?= date('d-m-Y H:s:i', strtotime($omset['date'])) ?></td>
-                    <td><?= $omset['name'] ?></td>
-                    <td><?= $omset['quantity'] ?></td>
-                    <td>Rp. <?= number_format($omset['omset']) ?></td>
-                </tr>
-                <?php endforeach; ?>
-                
+                    <?php if (empty($omsets)) : ?>
+                        <tr>
+                            <td colspan="5" class="text-center">No Data</td>
+                        </tr>
+                    <?php else: ?>
+                        <?php $no = 1; foreach ($omsets as $omset) : ?>
+                            <tr>
+                                <td><?= $no++; ?></td>
+                                <td><?= date('d-m-Y H:i:s', strtotime($omset['date'])) ?></td>
+                                <td><?= $omset['name'] ?? '-' ?></td>
+                                <td><?= $omset['quantity'] ?></td>
+                                <td>Rp. <?= number_format($omset['omset']) ?></td>
+                            </tr>
+                        <?php endforeach; ?>
+                    <?php endif; ?>
                 </tbody>
             </table>
-            </div>
+        </div>
+
         </div>
     </div>
 </div>
