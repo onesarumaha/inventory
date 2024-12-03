@@ -97,8 +97,8 @@
                       <label for="exampleFormControlSelectType">Type</label>
                       <select class="form-control" id="exampleFormControlSelectType">
                         <option>Pilih Type</option>
-                            <option value="in">In</option>
-                            <option value="out">Out</option>
+                            <option value="in">Laporan pemasukan</option>
+                            <option value="out">Laporan Hasil Penjualan</option>
                       </select>
                 </div>
         </div>

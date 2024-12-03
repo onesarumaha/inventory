@@ -23,18 +23,23 @@ class Pemasukan extends BaseController
     {
         $db = \Config\Database::connect();
         $builder = $db->table('pengadaan_barang')
-                      ->select('pengadaan_barang.*, product.name as nama_product, supplier.name as nama_supplier')
+                      ->select('pengadaan_barang.*, 
+                                product.name as nama_product, 
+                                supplier.name as nama_supplier,
+                                users.username as nama_user')
                       ->join('product', 'pengadaan_barang.product_id = product.id', 'left')
-                      ->join('supplier', 'pengadaan_barang.supplier_id = supplier.id', 'left');
-        
+                      ->join('supplier', 'pengadaan_barang.supplier_id = supplier.id', 'left')
+                      ->join('users', 'pengadaan_barang.user_id = users.id', 'left'); 
+    
         $userRole = session()->get('role'); 
         $userId = session()->get('id'); 
-
+    
         if ($userRole === 'owner') {
             $builder->where('pengadaan_barang.status', 2);
         } elseif ($userRole === 'petugas') {
             $builder->where('pengadaan_barang.user_id', $userId); 
         }
+    
         $builder->orderBy('pengadaan_barang.id', 'DESC');
         
         $pemasukan = $builder->get()->getResultArray();
@@ -45,6 +50,7 @@ class Pemasukan extends BaseController
         
         return view('pemasukan/index', $data);
     }
+    
     
     
 
@@ -206,6 +212,7 @@ class Pemasukan extends BaseController
             'customer_id' => $this->request->getPost('customer_id'),
             'user_id' => $this->request->getPost('user_id'),
             'upload' => $fileName,  
+            'status' => '0',  
         ];
     
         log_message('debug', 'Data to update: ' . json_encode($data));
@@ -242,13 +249,16 @@ class Pemasukan extends BaseController
         $supplier = $supplierModel->find($pemasukan['supplier_id']);
         $productModel = new \App\Models\Product();
         $product = $productModel->find($pemasukan['product_id']);
+        $userModel = new \App\Models\Users();
+        $user = $userModel->find($pemasukan['user_id']);
 
 
         $data = [
             'title' => 'Detail Pemasukan',
             'pemasukan' => $pemasukan,
             'supplier' => $supplier,
-            'product' => $product
+            'product' => $product,
+            'user' => $user
         ];
 
         return view('pemasukan/view', $data); 
@@ -408,6 +418,22 @@ class Pemasukan extends BaseController
                 'status' => 'error',
                 'message' => $e->getMessage(),
             ]);
+        }
+    }
+
+    public function saveReject()
+    {
+        $model = new ModelsPemasukan(); 
+
+        $id = $this->request->getPost('id');
+        $keterangan = $this->request->getPost('ket');
+
+        if ($id && $keterangan) {
+            $model->update($id, ['status' => '4', 'ket' => $keterangan]);
+
+            return $this->response->setJSON(['status' => 'success', 'message' => 'Data berhasil direject']);
+        } else {
+            return $this->response->setJSON(['status' => 'error', 'message' => 'Data tidak valid']);
         }
     }
 

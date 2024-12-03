@@ -74,6 +74,7 @@ $routes->post('/pemasukan/approve-owner/(:num)', [Pemasukan::class, 'approveOwne
 $routes->post('/pemasukan/save-quantity', [Pemasukan::class, 'saveQuantityReal']); 
 $routes->get('/pemasukan/view/(:any)', [Pemasukan::class, 'view/$1']);
 $routes->delete('/pemasukan/(:num)', [Pemasukan::class, 'delete/$1']);
+$routes->post('/pemasukan/save-reject', [Pemasukan::class, 'saveReject']); 
 
 
 // route stok product

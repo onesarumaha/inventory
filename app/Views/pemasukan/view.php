@@ -18,6 +18,9 @@
                         Tidak ada lampiran
                     <?php endif; ?>
                 </p>
+                <p><strong>Alasan Reject :</strong> <?= $pemasukan['ket'] ?? '-' ?></p>
+                <p><strong>Dibuat :</strong> <?= $user['username'] ?? '-' ?></p>
+
             </div>
         </div>
     </div>

@@ -12,7 +12,7 @@ class Pemasukan extends Model
     protected $returnType       = 'array';
     protected $useSoftDeletes   = false;
     protected $protectFields    = true;
-    protected $allowedFields    = ['product_id', 'quantity', 'upload', 'price', 'supplier_id', 'user_id', 'date', 'status', 'quantity_real'];
+    protected $allowedFields    = ['product_id', 'quantity', 'upload', 'price', 'supplier_id', 'user_id', 'date', 'status', 'quantity_real', 'ket'];
 
     protected bool $allowEmptyInserts = false;
     protected bool $updateOnlyChanged = true;
@@ -52,5 +52,10 @@ class Pemasukan extends Model
     public function supplier() 
     {
         return $this->belongsTo(Supplier::class, 'supplier_id', 'id');
+    }
+
+    public function user() 
+    {
+        return $this->belongsTo(Users::class, 'user_id', 'id');
     }
 }

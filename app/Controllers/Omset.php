@@ -86,7 +86,6 @@ class Omset extends BaseController
     {
         $request = $this->request->getGet();
     
-        // Ambil parameter filter jika ada
         $startDate = $request['startDate'] ?? null;
         $endDate = $request['endDate'] ?? null;
         $petugasId = $request['petugasId'] ?? null;
@@ -94,7 +93,6 @@ class Omset extends BaseController
     
         $model = new ModelsOmset();
     
-        // Query untuk mendapatkan data berdasarkan filter
         $query = $model->select('date, product_id, quantity, omset, type');
 
         $query = $model->select('laporan.*, product.name as product_name')
@@ -199,7 +197,7 @@ class Omset extends BaseController
             
                 foreach ($data as $row) {
                     $html .= "<tr>
-                                <td>" . date('d-m-Y', strtotime($row['date'])) . "</td>
+                                <td>" . date('d-m-Y H:s:i' , strtotime($row['date'])) . "</td>
                                 <td>{$row['product_name']}</td>
                                 <td>{$row['quantity']}</td>
                                 <td>Rp. " . number_format($row['omset'], 0, ',', '.') . "</td>
