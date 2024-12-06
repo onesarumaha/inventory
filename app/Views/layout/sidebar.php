@@ -59,7 +59,7 @@
             <h6 class="collapse-header">Laporan</h6>
             <a class="collapse-item <?= is_active('/omset') ?>" href="<?= base_url('/omset') ?>">Penjualan</a>
             <a class="collapse-item <?= is_active('/laporan-pengadaan') ?>" href="<?= base_url('/laporan-pengadaan') ?>">Pengadaan</a>
-            <a class="collapse-item <?= is_active('/stock') ?>" href="<?= base_url('/stock') ?>">Stock Barang</a>
+            <a class="collapse-item <?= is_active('/stock') ?>" href="<?= base_url('/stock') ?>">Stock</a>
           </div>
         </div>
       </li>

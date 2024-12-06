@@ -36,7 +36,7 @@ class Omset extends BaseController
         $petugas = $userModel->getPetugas();
     
         $data = [
-            'title' => 'Laporan Omset',
+            'title' => 'Laporan Penjualan',
             'omsets' => $omset,
             'petugas' => $petugas,
             'totalOmset' => $totalOmset,
@@ -175,7 +175,7 @@ class Omset extends BaseController
             </style>
         </head>
         <body>
-            <h3>Omset Report</h3>
+            <h3>Laporan Penjualan</h3>
             <h4>PT. ALPHA KUMALA WARDHANA JAKARTA</h4>
             <label class="center">Start Date: ' . date('d-m-Y', strtotime($startDate)) . '</label> <br>
             <label class="center">End Date: ' . date('d-m-Y', strtotime($endDate)) . '</label>
@@ -244,7 +244,7 @@ class Omset extends BaseController
         $petugas = $userModel->getPetugas();
     
         $data = [
-            'title' => 'Laporan Omset',
+            'title' => 'Laporan Pengadaan',
             'omsets' => $omset,
             'petugas' => $petugas,
             'totalOmset' => $totalOmset,
@@ -383,7 +383,7 @@ class Omset extends BaseController
             </style>
         </head>
         <body>
-            <h3>Omset Report</h3>
+            <h3>Laporan Pengandaan</h3>
             <h4>PT. ALPHA KUMALA WARDHANA JAKARTA</h4>
             <label class="center">Start Date: ' . date('d-m-Y', strtotime($startDate)) . '</label> <br>
             <label class="center">End Date: ' . date('d-m-Y', strtotime($endDate)) . '</label>

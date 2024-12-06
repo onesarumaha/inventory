@@ -7,8 +7,20 @@
         <div class="card mb-4">
             <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
                 <h6 class="m-0 font-weight-bold text-primary"><?= $title ?></h6>
-                <a href="<?= base_url('/supplier/create') ?>" type="button" class="btn btn-primary mb-1"  data-toggle="modal" data-target="#exampleModalLaporan"
-                id="#myBtn">Advance Filter</a>
+                <div class="d-flex align-items-center">
+                    <div class="dropdown mr-3">
+                        <a class="btn btn-primary dropdown-toggle" href="#" role="button" id="dropdownMenuLink"
+                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Export
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                            <a class="dropdown-item" href="#" id="exportPdf">Export PDF</a>
+                            <a class="dropdown-item" href="#" id="exportExcel">Export Excel</a>
+                        </div>
+                    </div>
+                    <a href="<?= base_url('/supplier/create') ?>" type="button" class="btn btn-primary mb-1"  data-toggle="modal" data-target="#exampleModalLaporan"
+                    id="#myBtn">Advance Filter</a>
+            </div>
             </div>
             <div class="table-responsive">
                 <table class="table align-items-center table-flush">
@@ -65,24 +77,30 @@
                       <label for="exampleFormControlInputEndDate">End Date</label>
                       <input type="date" class="form-control" id="exampleFormControlInputEndDate">
                 </div>
+                <?php $role = session()->get('role');  ?>
                 <div class="form-group">
-                      <label for="exampleFormControlSelect1Petugas">Petugas</label>
-                      <select class="form-control" id="exampleFormControlSelect1Petugas">
-                        <option>Pilih Petugas</option>
-                        <?php foreach($petugas as $data) : ?>
-                            <option value="<?= $data['id'] ?>"><?= $data['username'] ?></option>
-                        <?php endforeach; ?>                        
-                      </select>
+                    <label for="exampleFormControlSelect1Petugas"></label>
+                    <?php if ($role === 'petugas'): ?>
+                        <input type="hidden" name="petugas_id" id="exampleFormControlSelect1Petugas" value="<?= session()->get('id') ?>">
+                    <?php else: ?>
+                        <select class="form-control" id="exampleFormControlSelect1Petugas" name="petugas_id">
+                            <option value="">Pilih Petugas</option>
+                            <?php foreach ($petugas as $data): ?>
+                                <option value="<?= $data['id'] ?>"><?= $data['username'] ?></option>
+                            <?php endforeach; ?>
+                        </select>
+                    <?php endif; ?>
                 </div>
-
                 <div class="form-group">
                       <label for="exampleFormControlSelectType">Type</label>
                       <select class="form-control" id="exampleFormControlSelectType">
                         <option>Pilih Type</option>
-                            <option value="in">In</option>
-                            <option value="out">Out</option>
+                            <option value="in">Pemasukan</option>
+                            <option value="out">Penjualan</option>
                       </select>
                 </div>
+
+               
         </div>
         <div class="modal-footer">
             <button type="button" class="btn btn-outline-primary" data-dismiss="modal">Close</button>
@@ -115,10 +133,19 @@
     .then(data => {
         let tableBody = '';
         data.forEach((stock, index) => {
+            const date = new Date(stock.date);
+            const formattedDate = date.toLocaleDateString('id-ID', {
+                year: 'numeric',
+                month: '2-digit',
+                day: '2-digit',
+                hour: '2-digit',
+                minute: '2-digit',
+                second: '2-digit',
+            });
             tableBody += `
                 <tr>
                     <td>${index + 1}</td>
-                    <td>${new Date(stock.date).toLocaleDateString('id-ID')}</td>
+                    <td>${formattedDate}</td>
                     <td>${stock.product_name}</td>
                     <td>${stock.quantity}</td>
                     <td>${stock.type}</td>
@@ -130,6 +157,41 @@
     })
     .catch(error => console.error('Error:', error));
 });
+
+
+
+document.getElementById('exportExcel').addEventListener('click', function () {
+    const startDate = document.getElementById('exampleFormControlInputStartDate').value;
+    const endDate = document.getElementById('exampleFormControlInputEndDate').value;
+    const petugasId = document.getElementById('exampleFormControlSelect1Petugas').value;
+    const type = document.getElementById('exampleFormControlSelectType').value;
+
+    const url = new URL('<?= base_url('/export-data-stock-pdf') ?>');
+    url.searchParams.append('startDate', startDate);
+    url.searchParams.append('endDate', endDate);
+    url.searchParams.append('petugasId', petugasId);
+    url.searchParams.append('type', type);
+    url.searchParams.append('action', 'excel'); 
+
+    window.location.href = url;
+});
+
+document.getElementById('exportPdf').addEventListener('click', function () {
+    const startDate = document.getElementById('exampleFormControlInputStartDate').value;
+    const endDate = document.getElementById('exampleFormControlInputEndDate').value;
+    const petugasId = document.getElementById('exampleFormControlSelect1Petugas').value;
+    const type = document.getElementById('exampleFormControlSelectType').value;
+
+    const url = new URL('<?= base_url('/export-data-stock-pdf') ?>');
+    url.searchParams.append('startDate', startDate);
+    url.searchParams.append('endDate', endDate);
+    url.searchParams.append('petugasId', petugasId);
+    url.searchParams.append('type', type);
+    url.searchParams.append('action', 'pdf'); 
+
+    window.location.href = url;
+});
+
 
 </script>
 

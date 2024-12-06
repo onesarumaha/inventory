@@ -129,10 +129,19 @@ document.getElementById('filterButton').addEventListener('click', function () {
     .then(data => {
         let tableBody = '';
         data.data.forEach((stock, index) => {
+            const date = new Date(stock.date);
+            const formattedDate = date.toLocaleDateString('id-ID', {
+                year: 'numeric',
+                month: '2-digit',
+                day: '2-digit',
+                hour: '2-digit',
+                minute: '2-digit',
+                second: '2-digit',
+            });
             tableBody += `
                 <tr>
                     <td>${index + 1}</td>
-                    <td>${new Date(stock.date).toLocaleDateString('id-ID')}</td>
+                    <td>${formattedDate}</td>
                     <td>${stock.product_name}</td>
                     <td>${stock.quantity}</td>
                     <td>Rp. ${new Intl.NumberFormat('id-ID').format(stock.omset)}</td>

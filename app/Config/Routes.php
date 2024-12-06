@@ -80,6 +80,10 @@ $routes->post('/pemasukan/save-reject', [Pemasukan::class, 'saveReject']);
 // route stok product
 $routes->get('/stock', [Stock::class, 'index']);
 $routes->get('/filter-stock', [Stock::class, 'filter']);
+$routes->get('/export-data-stock-pdf', [Stock::class, 'exportDataStock']);
+$routes->get('/export-data-stock', [Stock::class, 'exportDataStock']);
+
+
 $routes->get('/omset', [Omset::class, 'index']);
 $routes->get('/laporan-pengadaan', [Omset::class, 'pengadaan']);
 $routes->get('/filter-omset', [Omset::class, 'filter']);
