@@ -16,7 +16,7 @@ use CodeIgniter\Router\RouteCollection;
 /**
  * @var RouteCollection $routes
  */
-$routes->get('/', 'Home::index');
+$routes->get('/', [DashboardContoller::class, 'index']);
 
 $routes->get('/dashboard', [DashboardContoller::class, 'index']);
 
@@ -81,8 +81,11 @@ $routes->post('/pemasukan/save-reject', [Pemasukan::class, 'saveReject']);
 $routes->get('/stock', [Stock::class, 'index']);
 $routes->get('/filter-stock', [Stock::class, 'filter']);
 $routes->get('/omset', [Omset::class, 'index']);
+$routes->get('/laporan-pengadaan', [Omset::class, 'pengadaan']);
 $routes->get('/filter-omset', [Omset::class, 'filter']);
+$routes->get('/filter-omset-pengadaan', [Omset::class, 'filterPengadaan']);
 $routes->get('/export-data-omset', [Omset::class, 'exportDataOmset']);
+$routes->get('/export-data-omset-pengadaan', [Omset::class, 'exportDataOmsetPengadaan']);
 
 // route profile
 $routes->get('/profile', [Profile::class, 'index']);

@@ -48,16 +48,17 @@
         </a>
       </li>
 
-      <li class="nav-item <?= is_active('/omset') || is_active('/stoct') ? 'active' : '' ?>">
+      <li class="nav-item <?= is_active('/laporan-pengadaan') ||  is_active('/omset') || is_active('/stoct') ? 'active' : '' ?>">
       <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseBootstraps"
           aria-expanded="true" aria-controls="collapseBootstraps">
           <i class="far fa-fw fa-window-maximize"></i>
           <span>Laporan</span>
         </a>
-        <div id="collapseBootstraps" class="collapse <?= is_active('/omset') || is_active('/stock') ? 'show' : '' ?>" aria-labelledby="headingBootstraps" data-parent="#accordionSidebar">
+        <div id="collapseBootstraps" class="collapse <?= is_active('/laporan-pengadaan') || is_active('/omset') || is_active('/stock') ? 'show' : '' ?>" aria-labelledby="headingBootstraps" data-parent="#accordionSidebar">
           <div class="bg-white py-2 collapse-inner rounded">
             <h6 class="collapse-header">Laporan</h6>
-            <a class="collapse-item <?= is_active('/omset') ?>" href="<?= base_url('/omset') ?>">Omset</a>
+            <a class="collapse-item <?= is_active('/omset') ?>" href="<?= base_url('/omset') ?>">Penjualan</a>
+            <a class="collapse-item <?= is_active('/laporan-pengadaan') ?>" href="<?= base_url('/laporan-pengadaan') ?>">Pengadaan</a>
             <a class="collapse-item <?= is_active('/stock') ?>" href="<?= base_url('/stock') ?>">Stock Barang</a>
           </div>
         </div>

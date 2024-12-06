@@ -97,7 +97,6 @@
                         </select>
                     <?php endif; ?>
                 </div>
-
         </div>
         <div class="modal-footer">
             <button type="button" class="btn btn-outline-primary" data-dismiss="modal">Close</button>
@@ -108,13 +107,14 @@
 </div>
 
 
+
 <script>
 document.getElementById('filterButton').addEventListener('click', function () {
     const startDate = document.getElementById('exampleFormControlInputStartDate').value;
     const endDate = document.getElementById('exampleFormControlInputEndDate').value;
     const petugasId = document.getElementById('exampleFormControlSelect1Petugas').value;
 
-    const url = new URL('<?= base_url('/filter-omset') ?>');
+    const url = new URL('<?= base_url('/filter-omset-pengadaan') ?>');
     url.searchParams.append('startDate', startDate);
     url.searchParams.append('endDate', endDate);
     url.searchParams.append('petugasId', petugasId);
@@ -168,7 +168,7 @@ document.getElementById('exportPdf').addEventListener('click', function () {
     const endDate = document.getElementById('exampleFormControlInputEndDate').value;
     const petugasId = document.getElementById('exampleFormControlSelect1Petugas').value;
 
-    const url = new URL('<?= base_url('/export-data-omset') ?>');
+    const url = new URL('<?= base_url('/export-data-omset-pengadaan') ?>');
     url.searchParams.append('startDate', startDate);
     url.searchParams.append('endDate', endDate);
     url.searchParams.append('petugasId', petugasId);

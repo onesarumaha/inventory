@@ -47,6 +47,7 @@ class Omset extends Model
    public function getProduct()
    {
         return $this->join('product', 'product.id = laporan.product_id', 'left')
+            ->where('laporan.type', 'out') 
             ->orderBy('laporan.id', 'DESC')
             ->findAll();
    }
@@ -62,10 +63,28 @@ class Omset extends Model
    {
        return $this->select('laporan.*, product.name AS name')
                    ->join('product', 'product.id = laporan.product_id', 'left')
-                   ->where('laporan.user_id', $petugas_id)
+                   ->where('laporan.user_id', $petugas_id,)
+                   ->where( 'laporan.type', 'out')
                    ->orderBy('laporan.id', 'DESC')
                    ->findAll();
    }
 
+   public function getPengadaanPetugas($petugas_id)
+   {
+       return $this->select('laporan.*, product.name AS name')
+                   ->join('product', 'product.id = laporan.product_id', 'left')
+                   ->where('laporan.user_id', $petugas_id)
+                   ->where('laporan.type', 'in')
+                   ->orderBy('laporan.id', 'DESC')
+                   ->findAll();
+   }
+
+   public function getLaporanPetugas()
+   {
+        return $this->join('product', 'product.id = laporan.product_id', 'left')
+            ->where('laporan.type', 'in') 
+            ->orderBy('laporan.id', 'DESC')
+            ->findAll();
+   }
    
 }
