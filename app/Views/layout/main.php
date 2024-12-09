@@ -73,9 +73,10 @@
       <footer class="sticky-footer bg-white">
         <div class="container my-auto py-2">
           <div class="copyright text-center my-auto">
-            <span>copyright &copy; <script> document.write(new Date().getFullYear()); </script> - Inventory |
-              <b><a href="https://themewagon.com/" target="_blank">PT. ALPHA KUMALA WARDHANA JAKARTA</a></b>
+            <span> 
+                <b>PT. ALPHA KUMALA WARDHANA JAKARTA</b> 
             </span>
+             <div class="version" id="version-ruangadmin"></div>
           </div>
         </div>
       </footer>
