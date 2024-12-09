@@ -98,3 +98,4 @@ $routes->post('/profile/update-password', [Profile::class, 'updatePassword']);
 
 // chart
 $routes->get('/chart-penjualan-petugas', [DashboardContoller::class, 'getSalesData']);
+$routes->get('/get-top-product', [DashboardContoller::class, 'getTopProduct']);

@@ -31,18 +31,39 @@ class DashboardContoller extends BaseController
 
     public function getSalesData()
     {
-        $model = new Laporan();
-
-        // Ambil data penjualan per user
+        $model = new Laporan();    
         $salesData = $model->getSalesByUser();
 
-        // Format data untuk Chart.js
-        $labels = array_column($salesData, 'username'); // Nama user
-        $omset = array_column($salesData, 'total_sales'); // Omset
+        $labels = array_column($salesData, 'username'); 
+        $omset = array_column($salesData, 'total_sales'); 
 
         return $this->respond([
             'labels' => $labels,
             'omset'  => $omset,
+        ]);
+    }
+
+
+    public function getTopProduct()
+    {
+        $bulan = $this->request->getVar('month') ?? date('m'); 
+        $tahun = $this->request->getVar('year') ?? date('Y');  
+        
+
+        $model = new Laporan();
+        
+        $topProducts = $model->getTopProducts($bulan, $tahun);
+
+        $productNames = [];
+        $productSales = [];
+        foreach ($topProducts as $product) {
+            $productNames[] = $product['product_name']; 
+            $productSales[] = (int) $product['total_sold']; 
+        }
+
+        return $this->response->setJSON([
+            'productNames' => $productNames,
+            'productSales' => $productSales,
         ]);
     }
     

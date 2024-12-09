@@ -22,5 +22,17 @@ class Laporan extends Model
             ->orderBy('total_sales', 'DESC')
             ->findAll();
     }
+
+    public function getTopProducts($bulan, $tahun)
+    {
+        return $this->select('product.name as product_name, SUM(laporan.quantity) as total_sold')
+                ->join('product', 'product.id = laporan.product_id')
+                ->where('MONTH(laporan.date)', $bulan)
+                ->where('YEAR(laporan.date)', $tahun)  
+                ->groupBy('laporan.product_id')
+                ->orderBy('total_sold', 'DESC')
+                ->limit(5)
+                ->findAll();
+    }
   
 }

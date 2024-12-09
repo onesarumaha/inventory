@@ -101,7 +101,8 @@
   <script src="<?= base_url('frontend/assets/') ?>vendor/select2/dist/js/select2.min.js"></script>
   <!-- Page level custom scripts -->
   <script src="<?= base_url('frontend/assets/') ?>vendor/bootstrap-datepicker/js/bootstrap-datepicker.min.js"></script>
-  
+  <script src="<?= base_url('frontend/assets/') ?>js/demo/chart-pie-demo.js"></script>
+
 
   <script>
     $(document).ready(function () {
@@ -110,8 +111,6 @@
 
       $('.select2-single').select2();
 
-
-        // Bootstrap Date Picker
       $('#simple-date1 .input-group.date').datepicker({
         format: 'dd/mm/yyyy',
         todayBtn: 'linked',
@@ -478,6 +477,10 @@
               }
           });
       }
+
+      document.getElementById('logoutButton').addEventListener('click', function() {
+        localStorage.removeItem('modalShown'); 
+    });
 
 </script>
 

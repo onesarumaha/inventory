@@ -214,7 +214,7 @@ class Transaksi extends BaseController
         $transaksiItems = $transaksiItemModel->getItemsWithProduct($id);
     
         $data = [
-            'title' => 'Detail Transaksi',
+            'title' => 'Detail Pengeluaran',
             'transaksi' => $transaksi,
             'transaksiItems' => $transaksiItems,
         ];

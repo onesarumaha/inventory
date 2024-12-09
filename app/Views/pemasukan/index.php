@@ -110,7 +110,7 @@
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Edit Quantity</h5>
+                <h5 class="modal-title" id="exampleModalLabel">Check Quantity</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -190,6 +190,16 @@
             Swal.fire({
                 title: 'Error!',
                 text: 'Quantity yang anda masukkan terlalu besar.',
+                icon: 'warning',
+                confirmButtonText: 'OK'
+            });
+            return; 
+        }
+
+        if (newQuantity < currentQuantity) {
+            Swal.fire({
+                title: 'Error!',
+                text: 'Quantity yang anda masukkan terlalu kecil.',
                 icon: 'warning',
                 confirmButtonText: 'OK'
             });

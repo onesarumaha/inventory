@@ -60,6 +60,7 @@ class Product extends BaseController
 
     public function edit($id)
     {
+        // var_dump($id); exit();
         $productModel = new ModelsProduct();
         $product = $productModel->find($id);
 

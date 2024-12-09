@@ -92,7 +92,7 @@
                 </div>
                 <div class="card-body">
                   <div class="chart-bar">
-                    <canvas id="myBarChart"></canvas>
+                    <canvas id="getChartPetugas"></canvas>
                   </div>
                   <hr>
                 </div>
@@ -100,65 +100,19 @@
             </div>
 
 
-            <!-- Invoice Example -->
+            <!--  top product penjualan -->
             <div class="col-xl-5 col-lg-7 mb-4">
-              <div class="card">
-                <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                  <h6 class="m-0 font-weight-bold text-primary">Invoice</h6>
-                  <a class="m-0 float-right btn btn-danger btn-sm" href="#">View More <i
-                      class="fas fa-chevron-right"></i></a>
+              <div class="card shadow mb-4">
+                <div class="card-header py-3">
+                  <h6 class="m-0 font-weight-bold text-primary">Top Product </h6>
                 </div>
-                <div class="table-responsive">
-                  <table class="table align-items-center table-flush">
-                    <thead class="thead-light">
-                      <tr>
-                        <th>Order ID</th>
-                        <th>Customer</th>
-                        <th>Item</th>
-                        <th>Status</th>
-                        <th>Action</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr>
-                        <td><a href="#">RA0449</a></td>
-                        <td>Udin Wayang</td>
-                        <td>Nasi Padang</td>
-                        <td><span class="badge badge-success">Delivered</span></td>
-                        <td><a href="#" class="btn btn-sm btn-primary">Detail</a></td>
-                      </tr>
-                      <tr>
-                        <td><a href="#">RA5324</a></td>
-                        <td>Jaenab Bajigur</td>
-                        <td>Gundam 90' Edition</td>
-                        <td><span class="badge badge-warning">Shipping</span></td>
-                        <td><a href="#" class="btn btn-sm btn-primary">Detail</a></td>
-                      </tr>
-                      <tr>
-                        <td><a href="#">RA8568</a></td>
-                        <td>Rivat Mahesa</td>
-                        <td>Oblong T-Shirt</td>
-                        <td><span class="badge badge-danger">Pending</span></td>
-                        <td><a href="#" class="btn btn-sm btn-primary">Detail</a></td>
-                      </tr>
-                      <tr>
-                        <td><a href="#">RA1453</a></td>
-                        <td>Indri Junanda</td>
-                        <td>Hat Rounded</td>
-                        <td><span class="badge badge-info">Processing</span></td>
-                        <td><a href="#" class="btn btn-sm btn-primary">Detail</a></td>
-                      </tr>
-                      <tr>
-                        <td><a href="#">RA1998</a></td>
-                        <td>Udin Cilok</td>
-                        <td>Baby Powder</td>
-                        <td><span class="badge badge-success">Delivered</span></td>
-                        <td><a href="#" class="btn btn-sm btn-primary">Detail</a></td>
-                      </tr>
-                    </tbody>
-                  </table>
+                <div class="card-body">
+                  <div class="chart-pie pt-4">
+                    <canvas id="getTopProduct"></canvas>
+                  </div>
+                  <hr>
+                    Persentase product terlaris bulan ini
                 </div>
-                <div class="card-footer"></div>
               </div>
             </div>
            
@@ -205,29 +159,33 @@
             </div>
           </div>
 
-          <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-         <script>
-          <?php if (!empty($minStock)): ?>
-              $(document).ready(function () {
-                  $('#exampleModal').modal('show');
-              });
-          <?php endif; ?>
+      <script>
+        $(document).ready(function () {
+              var modalShown = localStorage.getItem('modalShown'); 
+              <?php if (!empty($minStock)): ?>
+                  if (!modalShown) {
+                      $('#exampleModal').modal('show');
+                      localStorage.setItem('modalShown', 'true');
+                  }
+              <?php endif; ?>
+          });
+
 
 
         fetch('<?= base_url('/chart-penjualan-petugas') ?>')
             .then(response => response.json())
             .then(data => {
-                const ctx = document.getElementById("myBarChart");
-                const myBarChart = new Chart(ctx, {
+                const ctx = document.getElementById("getChartPetugas");
+                const getChartPetugas = new Chart(ctx, {
                     type: 'bar',
                     data: {
-                        labels: data.labels, // Nama user
+                        labels: data.labels, 
                         datasets: [{
                             label: "Omset Penjualan",
                             backgroundColor: "#4e73df",
                             hoverBackgroundColor: "#2e59d9",
                             borderColor: "#4e73df",
-                            data: data.omset, // Total penjualan
+                            data: data.omset, 
                         }],
                     },
                     options: {
@@ -298,6 +256,59 @@
             })
             .catch(error => console.error('Error fetching sales data:', error));
 
+
+            function loadChartData() {
+            fetch("<?= site_url('/get-top-product') ?>")
+                .then(response => response.json())
+                .then(data => {
+                    const totalSales = data.productSales.reduce((sum, current) => sum + current, 0);
+                    const percentageSales = data.productSales.map(sales => ((sales / totalSales) * 100).toFixed(2));
+                    var ctx = document.getElementById("getTopProduct").getContext('2d');
+
+                    var getTopProduct = new Chart(ctx, {
+                        type: 'doughnut',
+                        data: {
+                            labels: data.productNames, 
+                            datasets: [{
+                                data: percentageSales, 
+                                backgroundColor: ['#4e73df', '#1cc88a', '#36b9cc', '#f6c23e', '#e74a3b'],
+                                hoverBackgroundColor: ['#2e59d9', '#17a673', '#2c9faf', '#f4b619', '#d23535'],
+                                hoverBorderColor: "rgba(234, 236, 244, 1)",
+                            }],
+                        },
+                        options: {
+                            maintainAspectRatio: false,
+                            tooltips: {
+                                callbacks: {
+                                    label: function(tooltipItem, data) {
+                                        const dataset = data.datasets[tooltipItem.datasetIndex];
+                                        const value = dataset.data[tooltipItem.index];
+                                        const label = data.labels[tooltipItem.index];
+                                        return `${label}: ${value}%`;
+                                    }
+                                },
+                                backgroundColor: "rgb(255,255,255)",
+                                bodyFontColor: "#858796",
+                                borderColor: '#dddfeb',
+                                borderWidth: 1,
+                                xPadding: 15,
+                                yPadding: 15,
+                                displayColors: false,
+                                caretPadding: 10,
+                            },
+                            legend: {
+                                display: true 
+                            },
+                            cutoutPercentage: 60, 
+                        },
+                    });
+                })
+                .catch(error => console.log('Error:', error));
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            loadChartData();
+        });
 
       </script>
 

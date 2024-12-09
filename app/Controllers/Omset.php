@@ -383,7 +383,7 @@ class Omset extends BaseController
             </style>
         </head>
         <body>
-            <h3>Laporan Pengandaan</h3>
+            <h3>Laporan Pengadaan</h3>
             <h4>PT. ALPHA KUMALA WARDHANA JAKARTA</h4>
             <label class="center">Start Date: ' . date('d-m-Y', strtotime($startDate)) . '</label> <br>
             <label class="center">End Date: ' . date('d-m-Y', strtotime($endDate)) . '</label>
