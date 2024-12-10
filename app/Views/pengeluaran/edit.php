@@ -9,7 +9,7 @@
                 <h6 class="m-0 font-weight-bold text-primary"><?= $title ?></h6>
             </div>
             <div class="card-body">
-                <form id="pengeluaranForm" action="<?= isset($pengeluaran) ? base_url('/pengeluaran/update/'.$pengeluaran['id']) : base_url('/pengeluaran/store'); ?>" method="POST">
+                <form id="pengeluaranForm"  action="<?= base_url('pengeluaran/update/'.$transaksi['no_transaksi']); ?>" method="post">
                     <?= csrf_field(); ?>
                     <div class="row">
                         <div class="form-group col-md-6">
@@ -47,41 +47,35 @@
                     <div class="row">
                         <div class="form-group col-md-6">
                             <div class="row" id="productContainer">
-                                <div class="row form-item ml-0" id="product_0">
+                            <?php if (isset($transaksiItems) && !empty($transaksiItems)): ?>
+                                <?php foreach ($transaksiItems as $key => $item): ?>
+                                <div class="row form-item ml-0" id="product_<?= $key ?>">
 
                                     <div class="form-group col-md-4">
-                                        <label for="select2SingleProduct_0">Nama Product</label>
-                                        <div class="input-group">
-                                            <select class="select2-single form-control product-select" name="product_id[]" id="select2SingleProduct_0">
-                                                <option value="">Pilih Product</option>
-                                                <?php foreach ($product as $pro): ?>
-                                                    <option value="<?= $pro['id']; ?>" 
-                                                        <?= (isset($transaksiItems) && $pro['id'] == $transaksiItems[0]['product_id']) ? 'selected' : ''; ?>>
-                                                        <?= $pro['name']; ?> | <?= $pro['volume']; ?>
-                                                    </option>
-                                                <?php endforeach; ?>
-                                            </select>
-                                        </div>
-                                        <?php if (session()->getFlashdata('errors')['product_id'] ?? null): ?>
-                                            <div style="color: red;">
-                                                <?= session()->getFlashdata('errors')['product_id']; ?>
-                                            </div>
-                                        <?php endif; ?>
+                                        <label for="select2SingleProduct_<?= $key ?>">Nama Product</label>
+                                        <select class="select2-single form-control product-select" name="product_id[]" id="select2SingleProduct_<?= $key ?>">
+                                            <option value="">Pilih Product</option>
+                                            <?php foreach ($product as $pro): ?>
+                                                <option value="<?= $pro['id']; ?>" 
+                                                    <?= ($item['product_id'] == $pro['id']) ? 'selected' : ''; ?>>
+                                                    <?= $pro['name']; ?> | <?= $pro['volume']; ?>
+                                                </option>
+                                            <?php endforeach; ?>
+                                        </select>
                                     </div>
 
                                     <div class="form-group col-md-2">
-                                        <label for="price_0">Harga</label>
-                                        <input type="text" class="form-control form-control-sm" name="price[]" id="price_0" placeholder="Price" readonly>
+                                        <label for="price_<?= $key ?>">Harga</label>
+                                        <input type="text" class="form-control form-control-sm" name="price[]" id="price_<?= $key ?>" value="<?= $item['price'] ?>" readonly>
+                                    </div>
+                                    <div class="form-group col-md-2">
+                                        <label for="stock_<?= $key ?>">Stock</label>
+                                        <input type="number" class="form-control form-control-sm" id="stock_<?= $key ?>" placeholder="Stock" readonly>
                                     </div>
 
                                     <div class="form-group col-md-2">
-                                        <label for="stock_0">Stock</label>
-                                        <input type="number" class="form-control form-control-sm" id="stock_0" placeholder="Stock" readonly>
-                                    </div>
-
-                                    <div class="form-group col-md-2">
-                                        <label for="quantity_0">Quantity</label>
-                                        <input type="number" class="form-control form-control-sm" name="quantity[]" id="quantity_0" placeholder="Quantity" value="<?= old('quantity', isset($pemasukan) ? $pemasukan['quantity'] : ''); ?>">
+                                        <label for="quantity_<?= $key ?>">Quantity</label>
+                                        <input type="number" class="form-control form-control-sm" name="quantity[]" id="quantity_<?= $key ?>" value="<?= $item['quantity'] ?>">
                                     </div>
 
                                     <div class="form-group col-md-2 d-flex align-items-center">
@@ -89,6 +83,8 @@
                                         <button type="button" class="btn btn-success btn-sm add-item mr-1">+</button>
                                     </div>
                                 </div>
+                                <?php endforeach; ?>
+                                <?php endif; ?>
                             </div>
 
 
@@ -133,6 +129,30 @@ $(document).ready(function() {
         $('.grand-total').text(formatRupiah(grandTotal));
     }
 
+    $('#productContainer .form-item').each(function() {
+        const index = $(this).attr('id').split('_')[1]; 
+        const productId = $(`#select2SingleProduct_${index}`).val();
+
+        if (productId) {
+            $.ajax({
+                url: `<?= base_url('pengeluaran/details'); ?>/${productId}`,
+                type: 'GET',
+                dataType: 'json',
+                success: function(response) {
+                    if (response.success) {
+                        $(`#price_${index}`).val(formatRupiah(response.price));
+                        $(`#stock_${index}`).val(response.stock); 
+                    } else {
+                        alert('Detail produk tidak ditemukan.');
+                    }
+                },
+                error: function() {
+                    alert('Terjadi kesalahan saat mengambil data produk.');
+                }
+            });
+        }
+    });
+
     $(document).on('change', '.product-select', function() {
         const index = $(this).attr('id').split('_')[1]; 
         const productId = $(this).val();
@@ -145,7 +165,7 @@ $(document).ready(function() {
                 success: function(response) {
                     if (response.success) {
                         $(`#price_${index}`).val(formatRupiah(response.price));
-                        $(`#stock_${index}`).val(response.stock);
+                        $(`#stock_${index}`).val(response.stock); 
                     } else {
                         alert('Detail produk tidak ditemukan.');
                     }
@@ -159,6 +179,7 @@ $(document).ready(function() {
             $(`#stock_${index}`).val('');
         }
     });
+
 
     $(document).on('click', '.add-item', function() {
         const index = $('#productContainer .form-item').length;

@@ -46,7 +46,11 @@
                         <a href="<?= base_url('/pengeluaran/view') ?>/<?= $pengeluaran['no_transaksi'] ?>" class="btn btn-info btn-sm">
                             <i class="fas fa-info-circle"></i>
                         </a>
-                        <a href="<?= base_url('/pengeluaran/view') ?>/<?= $pengeluaran['no_transaksi'] ?>" class="btn btn-danger btn-sm">
+                        <a href="<?= base_url('/pengeluaran/edit') ?>/<?= $pengeluaran['no_transaksi'] ?>" class="btn btn-warning btn-sm">
+                            <i class="fas fa-pen"></i>
+                        </a>
+
+                        <a href="javascript:void(0);" class="btn btn-danger btn-sm" onclick="confirmDeletePengeluaran(<?= $pengeluaran['no_transaksi'] ?>)">
                             <i class="fas fa-trash"></i>
                         </a>
                        

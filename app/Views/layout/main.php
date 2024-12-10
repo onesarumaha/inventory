@@ -479,6 +479,50 @@
           });
       }
 
+      function confirmDeletePengeluaran(id) {
+          Swal.fire({
+              title: 'Yakin hapus data ?',
+              text: "Apakah yakin ingin menghapus data ini?",
+              icon: 'warning',
+              showCancelButton: true,
+              confirmButtonColor: '#d33',
+              cancelButtonColor: '#3085d6',
+              confirmButtonText: 'Iya',
+              cancelButtonText: 'Tidak'
+          }).then((result) => {
+              if (result.isConfirmed) {
+                  $.ajax({
+                      url: '<?= base_url('/pengeluaran') ?>/' + id,
+                      type: 'DELETE',
+                      data: {
+                          
+                          '_csrf': '<?= csrf_hash() ?>' 
+                      },
+                      success: function(response) {
+                        if(response.success) {
+                              Swal.fire({
+                                  title: 'Berhasil!',
+                                  text: 'Berhasil hapus data pengeluaran.',
+                                  icon: 'success',
+                                  timer: 2000,  
+                                  showConfirmButton: false
+                              });
+                              setTimeout(() => {
+                                  window.location.href = '/pengeluaran'; 
+                              }, 2000); 
+                          } else {
+                              Swal.fire('Gagal!', 'Data tidak dapat di hapus.', 'error');
+                          }
+                      },
+                      error: function() {
+                          Swal.fire('Error!', 'Terjadi kesalahan saat menghubungi server.', 'error');
+                      }
+                  });
+              }
+          });
+      }
+
+
       document.getElementById('logoutButton').addEventListener('click', function() {
         localStorage.removeItem('modalShown'); 
     });
