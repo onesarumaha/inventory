@@ -5,6 +5,7 @@ namespace App\Controllers;
 use App\Controllers\BaseController;
 use App\Models\Laporan;
 use App\Models\Product;
+use App\Models\Users;
 use CodeIgniter\API\ResponseTrait;
 use CodeIgniter\HTTP\ResponseInterface;
 
@@ -15,7 +16,15 @@ class DashboardContoller extends BaseController
     public function index()
     {
         $product = new Product();
+        $userModel = new Users();
+
         $products = $product->findAll();
+
+        $omsetModel = new Laporan();
+        $totalOmsetHariIni = $omsetModel->getTotalOmsetHariIni();
+        $totalOmsetBulanan = $omsetModel->getTotalOmsetBulanan();
+        $totalOmsetTahunan = $omsetModel->getTotalOmsetTahunan();
+        $totalUser = $userModel->getTotalUser();
 
         $minStock = array_filter($products, function ($product) {
             return $product['stock'] <= 5;
@@ -24,7 +33,12 @@ class DashboardContoller extends BaseController
         $data = [
             'title' => 'Dashboard',
             'products' => $products,
-            'minStock' => $minStock 
+            'minStock' => $minStock ,
+            'totalOmsetHariIni' => $totalOmsetHariIni ?? 0, 
+            'totalOmsetBulanan' => $totalOmsetBulanan ?? 0, 
+            'totalOmsetTahunan' => $totalOmsetTahunan ?? 0, 
+            'totalUser' => $totalUser ?? 0, 
+
         ];
         return view('dashboard/index', $data);    
     }
@@ -66,5 +80,5 @@ class DashboardContoller extends BaseController
             'productSales' => $productSales,
         ]);
     }
-    
+
 }

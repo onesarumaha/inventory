@@ -316,7 +316,7 @@
           }).then((result) => {
               if (result.isConfirmed) {
                   $.ajax({
-                      url: '<?= base_url('/user') ?>/' + id,
+                      url: '<?= base_url('/users') ?>/' + id,
                       type: 'DELETE',
                       data: {
                           
@@ -332,7 +332,7 @@
                                   showConfirmButton: false
                               });
                               setTimeout(() => {
-                                  window.location.href = '/user'; 
+                                  window.location.href = '/users'; 
                               }, 2000); 
                           } else {
                               Swal.fire('Gagal!', 'Data tidak dapat di hapus.', 'error');

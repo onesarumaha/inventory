@@ -34,5 +34,35 @@ class Laporan extends Model
                 ->limit(5)
                 ->findAll();
     }
+
+    public function getTotalOmsetHariIni()
+    {
+        $tanggalHariIni = date('Y-m-d'); 
+        return $this->selectSum('omset')
+                    ->where('DATE(date)', $tanggalHariIni)
+                    ->get()
+                    ->getRow()
+                    ->omset;
+    }
+
+    public function getTotalOmsetBulanan()
+    {
+        $bulanIni = date('Y-m');
+        return $this->selectSum('omset')
+                    ->where('DATE_FORMAT(date, "%Y-%m")', $bulanIni)
+                    ->get()
+                    ->getRow()
+                    ->omset;
+    }
+
+    public function getTotalOmsetTahunan()
+    {
+        $tahunIni = date('Y'); 
+        return $this->selectSum('omset')
+                    ->where('DATE_FORMAT(date, "%Y")', $tahunIni)
+                    ->get()
+                    ->getRow()
+                    ->omset;
+    }
   
 }

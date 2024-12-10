@@ -48,4 +48,9 @@ class Users extends Model
     {
         return $this->where('role', 'petugas')->findAll();
     }
+
+    public function getTotalUser()
+    {
+        return $this->countAllResults();
+    }
 }

@@ -4,7 +4,7 @@ namespace App\Database\Migrations;
 
 use CodeIgniter\Database\Migration;
 
-class PengadaanBarang extends Migration
+class TransaksiItem extends Migration
 {
     public function up()
     {
@@ -14,6 +14,12 @@ class PengadaanBarang extends Migration
                 'constraint'     => 11,
                 'unsigned'       => true,
                 'auto_increment' => true,
+            ],
+            'transaksi_id' => [
+                'type'       => 'INT',
+                'constraint' => 11,
+                'unsigned'   => true,
+                'null'       => false,
             ],
             'product_id' => [
                 'type'       => 'INT',
@@ -31,26 +37,20 @@ class PengadaanBarang extends Migration
                 'constraint' => '15,2',
                 'null'       => false,
             ],
+            'total' => [
+                'type'       => 'DECIMAL',
+                'constraint' => '15,2',
+                'null'       => false,
+            ],
             'user_id' => [
                 'type'       => 'INT',
                 'constraint' => 11,
                 'unsigned'   => true,
                 'null'       => false,
             ],
-            'status' => [
-                'type'       => 'ENUM',
-                'constraint' => ['0', '1', '2'], 
-                'null'       => false,
-                'default'    => '0', 
-            ],
             'date' => [
                 'type' => 'DATE',
                 'null' => true,
-            ],
-            'upload' => [
-                'type'       => 'VARCHAR',
-                'constraint' => 255,
-                'null'       => true,
             ],
             'created_at' => [
                 'type' => 'DATETIME',
@@ -68,14 +68,15 @@ class PengadaanBarang extends Migration
 
         $this->forge->addKey('id', true);
 
+        // $this->forge->addForeignKey('transaksi_id', 'transaksi', 'id', 'CASCADE', 'CASCADE');
         // $this->forge->addForeignKey('product_id', 'product', 'id', 'CASCADE', 'CASCADE');
         // $this->forge->addForeignKey('user_id', 'users', 'id', 'CASCADE', 'CASCADE');
 
-        $this->forge->createTable('pengadaan_barang');
+        $this->forge->createTable('transaksi_item');
     }
 
     public function down()
     {
-        $this->forge->dropTable('pengadaan_barang');
+        $this->forge->dropTable('transaksi_item');
     }
 }
