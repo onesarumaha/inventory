@@ -18,7 +18,9 @@
                         Tidak ada lampiran
                     <?php endif; ?>
                 </p>
-                <p><strong>Alasan Reject :</strong> <?= $pemasukan['ket'] ?? '-' ?></p>
+                <?php if ($pemasukan['status'] != 3): ?>
+                    <p><strong>Alasan Reject :</strong> <?= $pemasukan['ket'] ?? '-' ?></p>
+                <?php endif; ?>               
                 <p><strong>Dibuat :</strong> <?= $user['username'] ?? '-' ?></p>
 
             </div>

@@ -47,7 +47,7 @@ class Transaksi extends BaseController
         $transaksiModel = new ModelsTransaksi();
         $transaksiItemModel = new ModelsTransaksiItem();
         $productModel = new Product();
-        $laporanModel = new Laporan(); // Tambahkan model Laporan
+        $laporanModel = new Laporan(); 
     
         try {
             $dataTransaksi = [
@@ -125,6 +125,7 @@ class Transaksi extends BaseController
                     'user_id' => $this->request->getPost('user_id'),
                     'type' => 'out',
                     'from' => 'pengeluaran',
+                    'created_at' => date('Y-m-d H:s:i'),
 
                 ];
     
@@ -188,7 +189,7 @@ class Transaksi extends BaseController
     
             $dataTransaksi = [
                 'customer_id' => $this->request->getPost('customer_id'),
-                'date' => date('Y-m-d H:s:i'),
+                'date' => date('Y-m-d H:i:s'),
                 'user_id' => $this->request->getPost('user_id'),
             ];
     
@@ -198,6 +199,10 @@ class Transaksi extends BaseController
     
             if (!$transaksiItemModel->where('transaksi_id', $id)->delete()) {
                 throw new \Exception("Failed to delete old transaction items.");
+            }
+    
+            if (!$laporanModel->where('parant_id', $id)->delete()) {
+                throw new \Exception("Failed to delete laporan for this transaction.");
             }
     
             $productIds = $this->request->getPost('product_id');
@@ -234,31 +239,32 @@ class Transaksi extends BaseController
                     'quantity' => $quantity,
                     'total' => $itemTotal,
                     'user_id' => $this->request->getPost('user_id'),
-                    'date' => date('Y-m-d H:s:i'),
+                    'date' => date('Y-m-d H:i:s'),
                 ];
     
                 if (!$transaksiItemModel->insert($dataTransaksiItem)) {
                     throw new \Exception("Failed to insert transaction item for product ID {$productId}.");
                 }
     
-                $totalPrice += $itemTotal;
-    
                 $productModel->update($productId, ['stock' => $stock - $quantity]);
     
                 $dataLaporan = [
                     'parant_id' => $id, 
-                    'date' => date('Y-m-d H:s:i'),
+                    'date' => date('Y-m-d H:i:s'),
                     'product_id' => $productId,
                     'quantity' => $quantity,
                     'omset' => $itemTotal, 
                     'user_id' => $this->request->getPost('user_id'),
                     'type' => 'out',
                     'from' => 'pengeluaran',
+                    'updated_at' => date('Y-m-d H:i:s'),
                 ];
     
                 if (!$laporanModel->insert($dataLaporan)) {
                     throw new \Exception("Failed to insert laporan for product ID {$productId}.");
                 }
+    
+                $totalPrice += $itemTotal;
             }
     
             $transaksiModel->update($id, ['total_price' => $totalPrice]);
@@ -268,6 +274,7 @@ class Transaksi extends BaseController
             return redirect()->back()->with('error', 'Error: ' . $e->getMessage());
         }
     }
+    
     
     
     
@@ -356,11 +363,19 @@ class Transaksi extends BaseController
                 throw new \Exception("Gagal menghapus transaksi.");
             }
     
-            return redirect()->to('/pengeluaran')->with('message', 'Transaksi berhasil dihapus.');
+            return $this->response->setJSON([
+                'success' => true,
+                'message' => 'Transaksi berhasil dihapus.'
+            ]);
+    
         } catch (\Exception $e) {
-            return redirect()->back()->with('error', 'Error: ' . $e->getMessage());
+            return $this->response->setJSON([
+                'success' => false,
+                'message' => $e->getMessage()
+            ]);
         }
     }
+    
     
     
     

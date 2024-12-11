@@ -58,18 +58,23 @@
 
                     <td style="display: flex; align-items: center; gap: 10px;">
                         <?php if (session()->get('role') === 'petugas'): ?>
-                            <a href="<?= base_url('/pemasukan/edit') ?>/<?= $pemasukan['id'] ?>" class="btn btn-warning btn-sm" style="margin-right: 5px;">
-                                <i class="fas fa-pen"></i>
-                            </a>
+                            <?php if($pemasukan['status'] != 3) : ?>
+                                <a href="<?= base_url('/pemasukan/edit') ?>/<?= $pemasukan['id'] ?>" class="btn btn-warning btn-sm" style="margin-right: 5px;">
+                                    <i class="fas fa-pen"></i>
+                                </a>
+                                
                             <a href="javascript:void(0);" class="btn btn-danger btn-sm" onclick="confirmDelete(<?= $pemasukan['id'] ?>)">
                                 <i class="fas fa-trash"></i>
                             </a>
+                            <?php endif; ?>
                             <a href="<?= base_url('/pemasukan/view/') ?><?= $pemasukan['id'] ?>" class="btn btn-success btn-sm">
-                                <i class="fas fa-eye"></i>
-                            </a>
+                                    <i class="fas fa-eye"></i>
+                                </a>
                             <?php if($pemasukan['status'] == 2) : ?>
-                            <button type="button" class="btn btn-primary btn-sm" data-toggle="modal"  data-target="#exampleModal" data-id="<?= $pemasukan['id'] ?>"> <i class="fas fa-list"></i></button>
-                            <?php endif ?>
+                                <button type="button" class="btn btn-primary btn-sm" data-toggle="modal"  data-target="#exampleModal" data-id="<?= $pemasukan['id'] ?>"> <i class="fas fa-list"></i></button>
+                            <?php endif; ?>
+
+                           
                         <?php endif; ?>
                         
 

@@ -58,4 +58,13 @@ class Pemasukan extends Model
     {
         return $this->belongsTo(Users::class, 'user_id', 'id');
     }
+
+    public function getNotificationsWithRelations()
+    {
+        $this->select('pengadaan_barang.*, pengadaan_barang.id, users.username, product.name');
+        $this->join('users', 'users.id = pengadaan_barang.user_id');
+        $this->join('product', 'product.id = pengadaan_barang.product_id');
+        $this->where('pengadaan_barang.status <', 3); 
+        return $this->findAll();
+    }
 }

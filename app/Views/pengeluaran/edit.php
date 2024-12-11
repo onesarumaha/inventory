@@ -101,7 +101,7 @@
                         </div>
                         <input type="hidden" name="user_id" value="<?= session()->get('id') ?>">
 
-                        <button type="submit" class="btn btn-primary"><?= isset($pengeluaran) ? 'Update' : 'Create'; ?></button>
+                        <button type="submit" class="btn btn-warning">Update</button>
                     </form>
                 </div>
             </div>

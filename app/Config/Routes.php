@@ -3,6 +3,7 @@
 use App\Controllers\AuthController;
 use App\Controllers\Customer;
 use App\Controllers\DashboardContoller;
+use App\Controllers\NotifikasiController;
 use App\Controllers\Omset;
 use App\Controllers\Pemasukan;
 use App\Controllers\Product;
@@ -101,3 +102,6 @@ $routes->post('/profile/update-password', [Profile::class, 'updatePassword']);
 // chart
 $routes->get('/chart-penjualan-petugas', [DashboardContoller::class, 'getSalesData']);
 $routes->get('/get-top-product', [DashboardContoller::class, 'getTopProduct']);
+
+// notifikasi
+$routes->get('/notifikasi', [NotifikasiController::class, 'index']);

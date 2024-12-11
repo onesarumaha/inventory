@@ -128,6 +128,7 @@ class Pemasukan extends BaseController
                 'user_id' => $this->request->getPost('user_id'),
                 'omset' => $this->request->getPost('price') * $this->request->getPost('quantity'),
                 'from' => 'pengadaan-barang',
+                'created_at' => date('Y-m-d H:s:i'),
             ];
 
             $laporan = new Laporan();
@@ -224,6 +225,8 @@ class Pemasukan extends BaseController
                 'quantity' => $this->request->getPost('quantity'),
                 'user_id' => $this->request->getPost('user_id'),
                 'from' => 'pengadaan-barang',
+                'updated_at' => date('Y-m-d H:s:i'),
+
             ];
     
             $laporanModel = new Laporan();

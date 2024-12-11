@@ -10,7 +10,7 @@ class Laporan extends Model
     protected $primaryKey       = 'id';
     protected $useAutoIncrement = true;
     protected $returnType       = 'array';
-    protected $useSoftDeletes   = false;
+    protected $useSoftDeletes   = true;
     protected $protectFields    = true;
     protected $allowedFields    = ['parant_id', 'date', 'product_id', 'quantity', 'type', 'from', 'user_id', 'omset'];
 
