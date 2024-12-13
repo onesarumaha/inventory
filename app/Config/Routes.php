@@ -98,6 +98,7 @@ $routes->get('/export-data-omset-pengadaan', [Omset::class, 'exportDataOmsetPeng
 $routes->get('/profile', [Profile::class, 'index']);
 $routes->get('/profile/ganti-password', [Profile::class, 'gantiPassword']);
 $routes->post('/profile/update-password', [Profile::class, 'updatePassword']);
+$routes->post('/update-photo', [Profile::class, 'updatePhoto']);
 
 // chart
 $routes->get('/chart-penjualan-petugas', [DashboardContoller::class, 'getSalesData']);
