@@ -8,7 +8,7 @@
 .LSOverride
 
 # OS X Thumbnails
-._*
+
 
 # Windows image file caches
 Thumbs.db
