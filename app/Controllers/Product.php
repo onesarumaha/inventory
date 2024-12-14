@@ -34,11 +34,10 @@ class Product extends BaseController
     public function store()
     {
         $rules = [
-            'name' => 'required|min_length[3]|max_length[50]',
+            'name' => 'required',
             'volume' => 'required',
             'price' => 'required|numeric',
             'stock' => 'required|numeric',
-            'description' => 'required|min_length[5]|max_length[255]',
         ];
     
         if (!$this->validate($rules)) {
