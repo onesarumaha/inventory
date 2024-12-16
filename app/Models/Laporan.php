@@ -29,9 +29,11 @@ class Laporan extends Model
                 ->join('product', 'product.id = laporan.product_id')
                 ->where('MONTH(laporan.date)', $bulan)
                 ->where('YEAR(laporan.date)', $tahun)  
+                ->where('type', 'out')  
+                ->where('laporan.deleted_at', null)  
                 ->groupBy('laporan.product_id')
                 ->orderBy('total_sold', 'DESC')
-                ->limit(5)
+                ->limit(3)
                 ->findAll();
     }
 
@@ -40,6 +42,8 @@ class Laporan extends Model
         $tanggalHariIni = date('Y-m-d'); 
         return $this->selectSum('omset')
                     ->where('DATE(date)', $tanggalHariIni)
+                    ->where('type', 'out') 
+                    ->where('deleted_at', null)  
                     ->get()
                     ->getRow()
                     ->omset;
@@ -50,6 +54,8 @@ class Laporan extends Model
         $bulanIni = date('Y-m');
         return $this->selectSum('omset')
                     ->where('DATE_FORMAT(date, "%Y-%m")', $bulanIni)
+                    ->where('type', 'out')  
+                    ->where('deleted_at', null)  
                     ->get()
                     ->getRow()
                     ->omset;
@@ -60,6 +66,8 @@ class Laporan extends Model
         $tahunIni = date('Y'); 
         return $this->selectSum('omset')
                     ->where('DATE_FORMAT(date, "%Y")', $tahunIni)
+                    ->where('type', 'out')  
+                    ->where('deleted_at', null)  
                     ->get()
                     ->getRow()
                     ->omset;

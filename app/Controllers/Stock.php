@@ -80,8 +80,9 @@ class Stock extends BaseController
     
         $query = $model->select('date, product_id, quantity, omset, type');
 
-        $query = $model->select('laporan.*, product.name as product_name')
-                                ->join('product', 'product.id = laporan.product_id');
+        $query = $model->select('laporan.date, laporan.product_id, laporan.quantity, laporan.omset, laporan.type, product.name as product_name, users.username as user_id')
+                        ->join('product', 'product.id = laporan.product_id')
+                        ->join('users', 'users.id = laporan.user_id');
     
         if ($startDate) {
             $query->where('date >=', $startDate);
@@ -178,6 +179,7 @@ class Stock extends BaseController
                         <th class="table-header">Product</th>
                         <th class="table-header">Quantity</th>
                         <th class="table-header">Type</th>
+                        <th class="table-header">Dibuat</th>
                     </tr>
                 </thead>
                 <tbody>';
@@ -188,6 +190,7 @@ class Stock extends BaseController
                                 <td>{$row['product_name']}</td>
                                 <td>{$row['quantity']}</td>
                                 <td>{$row['type']}</td>
+                                <td>{$row['user_id']}</td>
                             </tr>";
                 }
                 

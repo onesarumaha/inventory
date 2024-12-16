@@ -89,11 +89,12 @@ class Omset extends BaseController
     
         $model = new ModelsOmset();
     
-        $query = $model->select('date, product_id, quantity, omset, type');
+        $query = $model->select('date, product_id, quantity, omset, type, user_id');
 
-        $query = $model->select('laporan.*, product.name as product_name')
-                                ->where('laporan.type', 'out')
-                                ->join('product', 'product.id = laporan.product_id');
+        $query = $model->select('laporan.date, laporan.product_id, laporan.quantity, laporan.omset, laporan.type, product.name as product_name, users.username as user_id')
+                        ->where('laporan.type', 'out')
+                        ->join('product', 'product.id = laporan.product_id')
+                        ->join('users', 'users.id = laporan.user_id');
     
         if ($startDate) {
             $query->where('date >=', $startDate);
@@ -186,6 +187,7 @@ class Omset extends BaseController
                         <th class="table-header">Product</th>
                         <th class="table-header">Quantity</th>
                         <th class="table-header">Omset</th>
+                        <th class="table-header">Dibuat</th>
                     </tr>
                 </thead>
                 <tbody>';
@@ -196,6 +198,7 @@ class Omset extends BaseController
                                 <td>{$row['product_name']}</td>
                                 <td>{$row['quantity']}</td>
                                 <td>Rp. " . number_format($row['omset'], 0, ',', '.') . "</td>
+                                <td> " . $row['user_id']. "</td>
                             </tr>";
                 }
                 
@@ -299,9 +302,10 @@ class Omset extends BaseController
     
         $query = $model->select('date, product_id, quantity, omset, type');
 
-        $query = $model->select('laporan.*, product.name as product_name')
-                                ->where('laporan.type', 'in')
-                                ->join('product', 'product.id = laporan.product_id');
+        $query = $model->select('laporan.date, laporan.product_id, laporan.quantity, laporan.omset, laporan.type, product.name as product_name, users.username as user_id')
+                        ->where('laporan.type', 'in')
+                        ->join('product', 'product.id = laporan.product_id')
+                        ->join('users', 'users.id = laporan.user_id');
     
         if ($startDate) {
             $query->where('date >=', $startDate);
@@ -394,6 +398,7 @@ class Omset extends BaseController
                         <th class="table-header">Product</th>
                         <th class="table-header">Quantity</th>
                         <th class="table-header">Omset</th>
+                        <th class="table-header">Dibuat</th>
                     </tr>
                 </thead>
                 <tbody>';
@@ -404,6 +409,8 @@ class Omset extends BaseController
                                 <td>{$row['product_name']}</td>
                                 <td>{$row['quantity']}</td>
                                 <td>Rp. " . number_format($row['omset'], 0, ',', '.') . "</td>
+                                <td>{$row['user_id']}</td>
+
                             </tr>";
                 }
                 
